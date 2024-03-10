@@ -26,6 +26,7 @@ public class ProductDAO {
                     product.setProductID(resultSet.getInt("ProductID"));
                     product.setProductName(resultSet.getString("ProductName"));
                     product.setPrice(resultSet.getBigDecimal("Price"));
+                    product.setIMG(resultSet.getString("IMG"));
                     product.setDescription(resultSet.getString("Description"));
                     product.setCreatedDate(resultSet.getDate("CreatedDate"));
                     product.setCreatedBy(resultSet.getString("CreatedBy"));

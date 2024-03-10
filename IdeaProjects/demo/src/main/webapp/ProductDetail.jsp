@@ -1,8 +1,7 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="model.entity.Product" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
 
     <meta charset="utf-8">
@@ -11,7 +10,7 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
-    <title>Hexashop Ecommerce HTML CSS Template</title>
+    <title>Hexashop - Product Detail Page</title>
 
 
     <!-- Additional CSS Files -->
@@ -32,7 +31,9 @@
 
     -->
 </head>
+
 <body>
+
 <!-- ***** Preloader Start ***** -->
 <div id="preloader">
     <div class="jumper">
@@ -46,6 +47,7 @@
 
 <!-- ***** Header Area Start ***** -->
 <%@include file="WEB-INF/jspf/header.jsp"%>
+
 <!-- ***** Header Area End ***** -->
 
 <!-- ***** Main Banner Area Start ***** -->
@@ -54,7 +56,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="inner-content">
-                    <h2>Check Our Products</h2>
+                    <h2>Single Product Page</h2>
                     <span>Awesome &amp; Creative HTML CSS layout by TemplateMo</span>
                 </div>
             </div>
@@ -64,82 +66,59 @@
 <!-- ***** Main Banner Area End ***** -->
 
 
-<!-- ***** Products Area Starts ***** -->
-<section class="section" id="products">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="section-heading">
-                    <h2>Our Latest Products</h2>
-                    <span>Check out all of our products.</span>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- ***** Product Area Starts ***** -->
+<section class="section" id="product">
     <div class="container">
         <div class="row">
             <%
-                List<Product> products = (List<Product>) request.getAttribute("productList");
-                for (Product product : products) {
+               Product product=(Product)request.getAttribute("product");
+
             %>
-            <div class="col-lg-4">
-
-                <div class="item">
-                    <div class="thumb">
-                        <div class="hover-content">
-                            <ul>
-                                <li><a href="product-detail?pid=<%= product.getProductID()%>"><i class="fa fa-eye"></i></a></li>
-                                <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <img src="assets/images/<%= product.getIMG()%>" alt="">
-                    </div>
-
-                    <div class="down-content">
-                        <h4><%= product.getProductName()%> </h4>
-                        <span><%=product.getPrice()%>></span>
-                        <ul class="stars">
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                            <li><i class="fa fa-star"></i></li>
-                        </ul>
-                    </div>
+            <div class="col-lg-8">
+                <div class="left-images">
+                    <img src="assets/images/<%= product.getIMG()%>" alt="">
 
                 </div>
             </div>
-            <% } %>
-            <div class="col-lg-12">
-                <div class="pagination">
-                    <ul>
-                        <li >
-                            <a href="#">1</a>
-                        </li>
-                        <li class="active">
-                            <a href="#">2</a>
-                        </li>
-                        <li class="active">
-                            <a href="#">3</a>
-                        </li>
-                        <li>
-                            <a href="#">4</a>
-                        </li>
-                        <li>
-                            <a href="#">></a>
-                        </li>
+            <div class="col-lg-4">
+                <div class="right-content">
+                    <h4><%= product.getProductName()%></h4>
+                    <span class="price">$<%= product.getPrice()%></span>
+                    <ul class="stars">
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
+                        <li><i class="fa fa-star"></i></li>
                     </ul>
+                    <span><%= product.getDescription()%></span>
+
+                    <div class="quantity-content">
+                        <div class="left-content">
+                            <h6>No. of Orders</h6>
+                        </div>
+                        <div class="right-content">
+                            <div class="quantity buttons_added">
+                                <input type="button" value="-" class="minus"><input type="number" step="1" min="1" max="" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode=""><input type="button" value="+" class="plus">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total">
+                        <h4>Total: $210.00</h4>
+                        <div class="main-border-button"><a href="Cart">Add To Cart</a></div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 </section>
-<!-- ***** Products Area Ends ***** -->
+<!-- ***** Product Area Ends ***** -->
 
 <!-- ***** Footer Start ***** -->
 <%@include file="WEB-INF/jspf/footer.jsp"%>
+
+
 
 <!-- jQuery -->
 <script src="assets/js/jquery-2.1.0.min.js"></script>
@@ -159,6 +138,7 @@
 <script src="assets/js/slick.js"></script>
 <script src="assets/js/lightbox.js"></script>
 <script src="assets/js/isotope.js"></script>
+<script src="assets/js/quantity.js"></script>
 
 <!-- Global Init -->
 <script src="assets/js/custom.js"></script>
@@ -180,5 +160,7 @@
     });
 
 </script>
+
 </body>
+
 </html>

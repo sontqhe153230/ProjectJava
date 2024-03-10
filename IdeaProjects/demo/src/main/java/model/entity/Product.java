@@ -21,11 +21,11 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productID, String productName, BigDecimal price, String IMG, String description, Date createdDate, String createdBy, Date updatedDate, String updatedBy, boolean isDelete, Date deletedDate, String deletedBy) {
+    public Product(int productID, String productName, BigDecimal price, String img, String description, Date createdDate, String createdBy, Date updatedDate, String updatedBy, boolean isDelete, Date deletedDate, String deletedBy) {
         ProductID = productID;
         ProductName = productName;
         Price = price;
-        this.IMG = IMG;
+        IMG=img;
         Description = description;
         CreatedDate = createdDate;
         CreatedBy = createdBy;
@@ -36,20 +36,12 @@ public class Product {
         DeletedBy = deletedBy;
     }
 
-    public Product(int productID, String productName, BigDecimal price, String IMG, String description) {
-        ProductID = productID;
-        ProductName = productName;
-        Price = price;
-        this.IMG = IMG;
-        Description = description;
-    }
-
     public String getIMG() {
         return IMG;
     }
 
-    public void setIMG(String IMG) {
-        this.IMG = IMG;
+    public void setIMG(String img) {
+        IMG = img;
     }
 
     public boolean isDelete() {

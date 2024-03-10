@@ -12,29 +12,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-@WebServlet(name ="ProductListServlet", value = "/productList")
+@WebServlet(name ="ProductListServlet", value = "")
 public class ProductListServlet extends HttpServlet {
-
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ProductDAO productDAO = null;
+        try {
+            productDAO = new ProductDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        List<Product> productList = productDAO.getAllProducts();
 
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
-        out.println("<h1>Hello, World!</h1>");
-
-
-
-//        ProductDAO productDAO = null;
-//        try {
-//            productDAO = new ProductDAO();
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        List<Product> productList = productDAO.getAllProducts();
-//
-//        request.setAttribute("productList", productList);
-//        request.getRequestDispatcher("views/products.jsp").forward(request, response);
+        request.setAttribute("productList", productList);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
 
