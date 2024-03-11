@@ -3,26 +3,24 @@ package util;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import model.dao.AccountDao;
-import model.dao.AccountDao;
+import model.dao.AccountDAO;
+import model.dao.AccountDAO;
 import util.PasswordUtil;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-import static util.PasswordUtil.generateStrongPasswordHash;
-
 @WebListener
 public class AppStartupListener implements ServletContextListener {
 
-    private AccountDao Account;
+    private AccountDAO accountDAO;
 
     private PasswordUtil passwordUtil;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            Account = new AccountDao();
+            accountDAO = new AccountDAO();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -43,10 +41,10 @@ public class AppStartupListener implements ServletContextListener {
             throw new RuntimeException(e);
         }
 
-        if (AccountDao.existsByUsername(username)) {
-            AccountDao.updatePassword(username, hashedPassword, role);
+        if (accountDAO.existsByUsername(username)) {
+            accountDAO.updatePassword(username, hashedPassword, role);
         } else {
-            AccountDao.createAccount(username, hashedPassword, role);
+            AccountDAO.createAccount(username, hashedPassword);
         }
     }
 
@@ -63,10 +61,10 @@ public class AppStartupListener implements ServletContextListener {
             throw new RuntimeException(e);
         }
 
-        if (Account.existsByUsername(username)) {
-            Account.updatePassword(username, hashedPassword, role);
+        if (accountDAO.existsByUsername(username)) {
+            accountDAO.updatePassword(username, hashedPassword, role);
         } else {
-            Account.createAccount(username, hashedPassword, role);
+            accountDAO.createAccount(username, hashedPassword);
         }
     }
 

@@ -7,15 +7,17 @@ import util.PasswordUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAO {
-    Connection connection = new DBConnect().connection;
-
-
+    static Connection connection = new DBConnect().connection;
 
     PasswordUtil passwordUtil = new PasswordUtil();
-
-    public boolean createAccount(String username, String password) {
+    public AccountDAO() throws Exception {
+    }
+    public static boolean createAccount(String username, String password) {
         if (connection != null) {
             try {
                 String sql = "INSERT INTO Account (username, password, role, createdDate, createdBy) VALUES (?, ?, ?, ?, ?)";
@@ -35,12 +37,13 @@ public class AccountDAO {
         return false;
     }
 
-    public boolean existsByUsernameOrEmail(String username) {
+    public boolean existsByUsernameOrEmail(String username, String email) {
         if (connection != null) {
             try {
-                String sql = "SELECT * FROM Account WHERE username = ?";
+                String sql = "SELECT * FROM Account a LEFT JOIN Customer c ON a.CustomerID = c.CustomerID WHERE a.Username = ? OR c.Email = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, username);
+                preparedStatement.setString(2, email);
                 return preparedStatement.executeQuery().next();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -49,7 +52,7 @@ public class AccountDAO {
         return false;
     }
 
-    public boolean updatePassword(String username, String password, String role) {
+    public static boolean updatePassword(String username, String password, String role) {
         if (connection != null) {
             try {
                 String sql = "UPDATE Account SET password = ?, role = ? WHERE username = ?";
@@ -94,7 +97,7 @@ public class AccountDAO {
         return null;
     }
 
-    public boolean existsByUsername(String username) {
+    public static boolean existsByUsername(String username) {
         if (connection != null) {
             try {
                 String sql = "SELECT * FROM Account WHERE username = ?";
@@ -107,4 +110,35 @@ public class AccountDAO {
         }
         return false;
     }
+
+    public List<Account> getAllAccount() {
+        List<Account> AccountList = new ArrayList<>();
+        if (connection != null) {
+            String sql = "SELECT * FROM Account";
+            try {
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+                while (resultSet.next()) {
+                    Account Account = new Account();
+                    Account.setAccountId(resultSet.getInt("AccountID"));
+                    Account.setUsername(resultSet.getString("Username"));
+                    Account.setPassword(resultSet.getString("Password"));
+                    Account.setRole(resultSet.getString("Role"));
+                    Account.setIMG(resultSet.getString("IMG"));
+                    Account.setCreatedDate(resultSet.getDate("CreatedDate"));
+                    Account.setCreateBy(resultSet.getString("CreatedBy"));
+                    Account.setUpdatedDate(resultSet.getDate("UpdatedDate"));
+                    Account.setUpdatedBy(resultSet.getString("UpdatedBy"));
+                    Account.setIdDelete(resultSet.getBoolean("IsDelete"));
+                    Account.setDeleteDate(resultSet.getDate("DeletedDate"));
+                    Account.setDeletedBy(resultSet.getString("DeletedBy"));
+                    AccountList.add(Account);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return AccountList;
+    }
 }
+

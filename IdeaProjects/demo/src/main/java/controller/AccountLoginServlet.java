@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 public class AccountLoginServlet extends HttpServlet {
 
     AccountDAO accountDAO = new AccountDAO();
+
+    public AccountLoginServlet() throws Exception {
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cookie arr[] = request.getCookies();

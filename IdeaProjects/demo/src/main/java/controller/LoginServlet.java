@@ -2,7 +2,7 @@ package controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import model.dao.AccountDao;
+import model.dao.AccountDAO;
 import model.entity.Account;
 
 import jakarta.servlet.http.HttpServlet;
@@ -63,9 +63,9 @@ public class LoginServlet extends HttpServlet {
     }
 
     public Account getAccountByUser(String username) {
-        AccountDao accountDAO = null;
+        AccountDAO accountDAO = null;
         try {
-            accountDAO = new AccountDao();
+            accountDAO = new AccountDAO();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
