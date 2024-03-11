@@ -41,6 +41,10 @@ public class Account {
         DeletedBy = deletedBy;
     }
 
+    public Account() {
+
+    }
+
     public int getAccountId() {
         return AccountId;
     }
