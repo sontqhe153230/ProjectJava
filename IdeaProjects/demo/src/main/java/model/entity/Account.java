@@ -25,7 +25,9 @@ public class Account {
     private boolean idDelete;
     private Date DeleteDate;
     private String DeletedBy;
+    public Account() {
 
+    }
     public Account(int accountId, String username, String password, String role, String IMG, Date createdDate, String createBy, Date updatedDate, String updatedBy, boolean idDelete, Date deleteDate, String deletedBy) {
         AccountId = accountId;
         Username = username;
@@ -40,6 +42,8 @@ public class Account {
         DeleteDate = deleteDate;
         DeletedBy = deletedBy;
     }
+
+
 
     public int getAccountId() {
         return AccountId;

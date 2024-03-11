@@ -90,7 +90,7 @@
                             <ul>
                                 <li><a href="product-detail?pid=<%= product.getProductID()%>"><i class="fa fa-eye"></i></a></li>
                                 <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="Cart?id=<%= product.getProductID()%>&&quantity=1"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
                         <img src="assets/images/<%= product.getIMG()%>" alt="">

@@ -1,6 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="model.entity.Product" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="controller.OrderServlet" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,17 +59,31 @@
 <section class="section" id="Cart">
     <div class="container">
         <div class="row">
+
             <div class="col-xl-8">
+
+
                 <div class="card border shadow-none">
+                    <%
+                        // Lấy giỏ hàng từ session
+                        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+                        if (cart != null) {
+                            // Lặp qua mỗi mục trong giỏ hàng và hiển thị
+                            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+                                int productId = entry.getKey();
+                                int quantity = entry.getValue();
+
+
+                    %>
                     <div class="card-body">
 
                         <div class="d-flex align-items-start border-bottom pb-3">
                             <div class="me-4">
-                                <img src="https://www.bootdey.com/image/380x380/008B8B/000000" alt="" class="avatar-lg rounded">
+                                <img src="<%= new OrderServlet().GetUrlByProductId(productId) %>" alt="" class="avatar-lg rounded">
                             </div>
                             <div class="flex-grow-1 align-self-center overflow-hidden">
                                 <div>
-                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark">Waterproof Mobile Phone </a></h5>
+                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= new OrderServlet().GetNameById(productId) %></a></h5>
                                     <p class="text-muted mb-0">
                                         <i class="bx bxs-star text-warning"></i>
                                         <i class="bx bxs-star text-warning"></i>
@@ -98,7 +115,7 @@
                                 <div class="col-md-4">
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">Price</p>
-                                        <h5 class="mb-0 mt-2"><span class="text-muted me-2"><del class="font-size-16 fw-normal">$500</del></span>$450</h5>
+                                        <h5 class="mb-0 mt-2">$<%= new OrderServlet().GetPrice(productId) %></h5>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -106,14 +123,8 @@
                                         <p class="text-muted mb-2">Quantity</p>
                                         <div class="d-inline-flex">
                                             <select class="form-select form-select-sm w-xl">
-                                                <option value="1">1</option>
-                                                <option value="2" selected="">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
+                                                <option value="1"><%= quantity %></option>
+
                                             </select>
                                         </div>
                                     </div>
@@ -121,164 +132,22 @@
                                 <div class="col-md-3">
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">Total</p>
-                                        <h5>$900</h5>
+                                        <h5>$<%= new OrderServlet().GetTotalPrice(productId,quantity) %></h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                   <% } %>
+                    <% } %>
                 </div>
                 <!-- end card -->
 
-                <div class="card border shadow-none">
-                    <div class="card-body">
-
-                        <div class="d-flex align-items-start border-bottom pb-3">
-                            <div class="me-4">
-                                <img src="https://www.bootdey.com/image/380x380/FF00FF/000000" alt="" class="avatar-lg rounded">
-                            </div>
-                            <div class="flex-grow-1 align-self-center overflow-hidden">
-                                <div>
-                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark">Smartphone Dual Camera </a></h5>
-                                    <p class="text-muted mb-0">
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                    </p>
-                                    <p class="mb-0 mt-1">Color : <span class="fw-medium">Green</span></p>
-                                </div>
-                            </div>
-                            <div class="flex-shrink-0 ms-2">
-                                <ul class="list-inline mb-0 font-size-16">
-                                    <li class="list-inline-item">
-                                        <a href="#" class="text-muted px-1">
-                                            <i class="mdi mdi-trash-can-outline"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" class="text-muted px-1">
-                                            <i class="mdi mdi-heart-outline"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Price</p>
-                                        <h5 class="mb-0 mt-2"><span class="text-muted me-2"><del class="font-size-16 fw-normal">$280</del></span>$240</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Quantity</p>
-                                        <div class="d-inline-flex">
-                                            <select class="form-select form-select-sm w-xl">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3" selected="">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Total</p>
-                                        <h5>$720</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- end card -->
-
-                <div class="card border shadow-none">
-                    <div class="card-body">
-
-                        <div class="d-flex align-items-start border-bottom pb-3">
-                            <div class="me-4">
-                                <img src="https://www.bootdey.com/image/380x380/FF8C00/000000" alt="" class="avatar-lg rounded">
-                            </div>
-                            <div class="flex-grow-1 align-self-center overflow-hidden">
-                                <div>
-                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark">Black Colour Smartphone </a></h5>
-                                    <p class="text-muted mb-0">
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                    </p>
-                                    <p class="mb-0 mt-1">Color : <span class="fw-medium">Blue</span></p>
-                                </div>
-                            </div>
-                            <div class="flex-shrink-0 ms-2">
-                                <ul class="list-inline mb-0 font-size-16">
-                                    <li class="list-inline-item">
-                                        <a href="#" class="text-muted px-1">
-                                            <i class="mdi mdi-trash-can-outline"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" class="text-muted px-1">
-                                            <i class="mdi mdi-heart-outline"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Price</p>
-                                        <h5 class="mb-0 mt-2"><span class="text-muted me-2"><del class="font-size-16 fw-normal">$750</del></span>$950</h5>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Quantity</p>
-                                        <div class="d-inline-flex">
-                                            <select class="form-select form-select-sm w-xl">
-                                                <option value="1" selected="">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mt-3">
-                                        <p class="text-muted mb-2">Total</p>
-                                        <h5>$950</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- end card -->
 
                 <div class="row my-4">
                     <div class="col-sm-6">
-                        <a href="ecommerce-products.html" class="btn btn-link text-muted">
+                        <a href="/Shop-Clothes" class="btn btn-link text-muted">
                             <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
                     </div> <!-- end col -->
                     <div class="col-sm-6">

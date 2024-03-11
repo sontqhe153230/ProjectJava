@@ -105,7 +105,7 @@
                     </div>
                     <div class="total">
                         <h4>Total: $210.00</h4>
-                        <div class="main-border-button"><a href="Cart">Add To Cart</a></div>
+                        <div class="main-border-button"><a href="javascript:void(0);" onclick="addToCart(<%= product.getProductID()%>)">Add To Cart</a></div>
                     </div>
                 </div>
             </div>
@@ -158,7 +158,14 @@
 
         });
     });
-
+    function addToCart(productId) {
+        var qualityValue = document.querySelector('input[name="quantity"]').value;
+        console.log(qualityValue);
+        var url = "Cart?id=" + productId + "&quantity=" + qualityValue;
+        console.log(url); // Just for testing, you can modify this to send the URL wherever you need
+        // Here you can perform any further actions with the constructed URL, like sending a request
+        window.location.href = url;
+    }
 </script>
 
 </body>

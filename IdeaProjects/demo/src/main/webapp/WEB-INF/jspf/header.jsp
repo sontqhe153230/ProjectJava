@@ -29,10 +29,10 @@
                             </ul>
                         </li>
 
-                        <li class="scroll-to-section"><a href="index.html">Log In</a></li>
-                        <li class="scroll-to-section"><a href="index.html">Cart</a></li>
-                        <li class="scroll-to-section"><a href="index.html">Nguyen Van A</a></li>
-                        <li class="scroll-to-section"><a href="index.html">Log Out</a></li>
+                        <li class="scroll-to-section"><a href="Login">Log In</a></li>
+<%--                        <li class="scroll-to-section"><a href="index.html">Cart</a></li>--%>
+<%--                        <li class="scroll-to-section"><a href="index.html">Nguyen Van A</a></li>--%>
+<%--                        <li class="scroll-to-section"><a href="index.html">Log Out</a></li>--%>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>
