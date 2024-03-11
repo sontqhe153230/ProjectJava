@@ -1,4 +1,7 @@
 package controller;
 
-public class OrderDetailServlet {
+import jakarta.servlet.http.HttpServlet;
+
+public class OrderDetailServlet  extends HttpServlet {
+
 }

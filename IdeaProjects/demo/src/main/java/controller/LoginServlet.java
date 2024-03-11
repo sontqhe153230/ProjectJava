@@ -11,7 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+
+import static util.PasswordUtil.validatePassword;
 
 @WebServlet(name ="LoginServlet", value = "/Login")
 public class LoginServlet extends HttpServlet {
@@ -25,7 +29,8 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         // Lấy tài khoản dựa trên tên người dùng và mật khẩu
-        Account account = getAccountByUserAndPass(username, password);
+        Account account = getAccountByUser(username);
+
 
         // Chuẩn bị loại nội dung phản hồi
         response.setContentType("text/plain");
@@ -33,8 +38,22 @@ public class LoginServlet extends HttpServlet {
 
         if (account != null) {
             // Nếu tài khoản được tìm thấy, đặt nó trong session
-            request.getSession().setAttribute("loggedInUser", account);
-            out.print("success");
+            try {
+                boolean checkAccount=validatePassword(password,account.getPassword());
+                if(checkAccount){
+                    request.getSession().setAttribute("loggedInUser", account);
+                    out.print("success");
+                }
+                else{
+                    out.print("failure");
+                }
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidKeySpecException e) {
+                throw new RuntimeException(e);
+            }
+
+
         } else {
             // Nếu không tìm thấy tài khoản, gửi thông báo thất bại
             out.print("failure");
@@ -43,7 +62,7 @@ public class LoginServlet extends HttpServlet {
         out.close();
     }
 
-    public Account getAccountByUserAndPass(String username, String password) {
+    public Account getAccountByUser(String username) {
         AccountDao accountDAO = null;
         try {
             accountDAO = new AccountDao();
@@ -59,7 +78,7 @@ public class LoginServlet extends HttpServlet {
 
         // Duyệt qua danh sách tài khoản để tìm tài khoản với tên người dùng và mật khẩu phù hợp
         for (Account account : accountList) {
-            if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
+            if (account.getUsername().equals(username)) {
                 foundAccount = account;
                 break; // Dừng vòng lặp khi tìm thấy tài khoản
             }

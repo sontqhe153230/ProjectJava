@@ -28,11 +28,14 @@
                                 <li><a href="contact.html">Contact Us</a></li>
                             </ul>
                         </li>
-
+                        <% if(session.getAttribute("loggedInUser")=="" ||session.getAttribute("loggedInUser")==null) {%>
                         <li class="scroll-to-section"><a href="Login">Log In</a></li>
-<%--                        <li class="scroll-to-section"><a href="index.html">Cart</a></li>--%>
-<%--                        <li class="scroll-to-section"><a href="index.html">Nguyen Van A</a></li>--%>
-<%--                        <li class="scroll-to-section"><a href="index.html">Log Out</a></li>--%>
+                        <%}%>
+                        <% if(session.getAttribute("loggedInUser")!=""&&session.getAttribute("loggedInUser")!=null) {%>
+                        <li class="scroll-to-section"><a href="Cart">Cart</a></li>
+                        <li class="scroll-to-section"><a href="index.html">Nguyen Van A</a></li>
+                        <li class="scroll-to-section"><a href="Logout">Log Out</a></li>
+                        <%}%>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>

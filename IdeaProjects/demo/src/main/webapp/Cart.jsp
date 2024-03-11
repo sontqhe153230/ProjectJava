@@ -118,14 +118,11 @@
                                         <h5 class="mb-0 mt-2">$<%= new OrderServlet().GetPrice(productId) %></h5>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">Quantity</p>
                                         <div class="d-inline-flex">
-                                            <select class="form-select form-select-sm w-xl">
-                                                <option value="1"><%= quantity %></option>
-
-                                            </select>
+                                            <h5 class="mb-0 mt-2">$<%= quantity %></h5>
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +130,12 @@
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">Total</p>
                                         <h5>$<%= new OrderServlet().GetTotalPrice(productId,quantity) %></h5>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mt-3">
+                                        <p class="text-muted mb-2">Remove</p>
+                                        <button onclick="RemoveItem(<%= productId %>)">Remove</button>
                                     </div>
                                 </div>
                             </div>
@@ -144,7 +147,10 @@
                 </div>
                 <!-- end card -->
 
-
+                    <%
+                        // Lấy giỏ hàng từ session
+                        Map<Integer, Integer> cart2 = (Map<Integer, Integer>) session.getAttribute("cart");
+                        if (cart != null) { %>
                 <div class="row my-4">
                     <div class="col-sm-6">
                         <a href="/Shop-Clothes" class="btn btn-link text-muted">
@@ -152,45 +158,36 @@
                     </div> <!-- end col -->
                     <div class="col-sm-6">
                         <div class="text-sm-end mt-2 mt-sm-0">
-                            <a href="ecommerce-checkout.html" class="btn btn-success">
+                            <a href="Payment" class="btn btn-success">
                                 <i class="mdi mdi-cart-outline me-1"></i> Checkout </a>
                         </div>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
-            </div>
 
+                <%}%>
+            </div>
+            <%
+                // Lấy giỏ hàng từ session
+                Map<Integer, Integer> cart3 = (Map<Integer, Integer>) session.getAttribute("cart");
+                if (cart != null) { %>
             <div class="col-xl-4">
                 <div class="mt-5 mt-lg-0">
                     <div class="card border shadow-none">
                         <div class="card-header bg-transparent border-bottom py-3 px-4">
-                            <h5 class="font-size-16 mb-0">Order Summary <span class="float-end">#MN0124</span></h5>
+                            <h5 class="font-size-16 mb-0">Order Summary <span class="float-end"></span></h5>
                         </div>
                         <div class="card-body p-4 pt-2">
 
                             <div class="table-responsive">
                                 <table class="table mb-0">
                                     <tbody>
-                                    <tr>
-                                        <td>Sub Total :</td>
-                                        <td class="text-end">$ 780</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Discount : </td>
-                                        <td class="text-end">- $ 78</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shipping Charge :</td>
-                                        <td class="text-end">$ 25</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Estimated Tax : </td>
-                                        <td class="text-end">$ 18.20</td>
-                                    </tr>
+
+
                                     <tr class="bg-light">
                                         <th>Total :</th>
                                         <td class="text-end">
                                             <span class="fw-bold">
-                                                $ 745.2
+                                                $ <%= new OrderServlet().GetOfTotalCart(cart3) %>
                                             </span>
                                         </td>
                                     </tr>
@@ -202,6 +199,7 @@
                     </div>
                 </div>
             </div>
+            <%}%>
         </div>
         <!-- end row -->
 
@@ -250,6 +248,22 @@
 
         });
     });
+
+    function RemoveItem(productId){
+
+            // Example of sending an AJAX request to the server
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "Cart", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Handle response from server if needed
+                    console.log("Item removed successfully.");
+                }
+            };
+            xhr.send("productId=" + encodeURIComponent(productId));
+        location.reload();
+    }
 
 </script>
 </body>

@@ -16,34 +16,62 @@ import java.util.Map;
 public class OrderServlet  extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(true); // Lấy hoặc tạo session
-
-        // Lấy id sản phẩm và số lượng từ request
-        int productId = Integer.parseInt(request.getParameter("id"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-        // Lấy hoặc tạo giỏ hàng từ session
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
-            session.setAttribute("cart", cart);
+        HttpSession session = request.getSession(true);
+        //check nếu chưa đăng nhap ,quay lai trang dang nhap
+        if(session.getAttribute("loggedInUser")==""||session.getAttribute("loggedInUser")==null){
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
 
-        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
-        if (cart.containsKey(productId)) {
-            // Nếu đã tồn tại, cập nhật số lượng
-            int existingQuantity = cart.get(productId);
-            cart.put(productId, existingQuantity + quantity);
-        } else {
-            // Nếu chưa tồn tại, thêm sản phẩm mới vào giỏ hàng
-            cart.put(productId, quantity);
+        if(request.getParameter("id")==null||request.getParameter("id")==""
+        ||request.getParameter("quantity")==null||request.getParameter("quantity")==""
+        ){
+            response.sendRedirect("Cart.jsp");
+        }
+        else{
+            // Lấy id sản phẩm và số lượng từ request
+            int productId = Integer.parseInt(request.getParameter("id"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+            // Lấy hoặc tạo giỏ hàng từ session
+            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+            if (cart == null) {
+                cart = new HashMap<>();
+                session.setAttribute("cart", cart);
+            }
+
+            // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+            if (cart.containsKey(productId)) {
+                // Nếu đã tồn tại, cập nhật số lượng
+                int existingQuantity = cart.get(productId);
+                cart.put(productId, existingQuantity + quantity);
+            } else {
+                // Nếu chưa tồn tại, thêm sản phẩm mới vào giỏ hàng
+                cart.put(productId, quantity);
+            }
+
+            // Chuyển hướng đến trang giỏ hàng
+            response.sendRedirect("Cart.jsp"); // Chuyển hướng đến trang giỏ hàng
         }
 
-        // Chuyển hướng đến trang giỏ hàng
-        response.sendRedirect("Cart.jsp"); // Chuyển hướng đến trang giỏ hàng
 
     }
 
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        String pId = request.getParameter("productId");
+        int productId = Integer.parseInt(pId);
+        HttpSession session = request.getSession(true);
+        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        if (cart.containsKey(productId)) {
+            cart.remove(productId);
+            // Update the session after removing the item
+            session.setAttribute("cart", cart);
+
+        } else {
+
+        }
+
+    }
 
     //hàm xử lí để get product bằng product id
     public Product GetProductById(int id){
@@ -114,6 +142,22 @@ public class OrderServlet  extends HttpServlet {
         Product p= GetProductById(id);
         if(p!=null){
             return "assets/images/"+p.getIMG();
+        }
+        return null;
+    }
+
+
+    public BigDecimal GetOfTotalCart(Map<Integer, Integer> cart){
+         BigDecimal total=BigDecimal.ZERO;
+        // Lấy  giỏ hàng từ session
+        if (cart != null) {
+            // Lặp qua mỗi mục trong giỏ hàng và hiển thị
+            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+                int productId = entry.getKey();
+                int quantity = entry.getValue();
+              total=total.add(GetTotalPrice(productId,quantity));
+            }
+            return total;
         }
         return null;
     }
