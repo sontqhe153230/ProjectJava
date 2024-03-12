@@ -40,16 +40,19 @@ public class LoginServlet extends HttpServlet {
             // Nếu tài khoản được tìm thấy, đặt nó trong session
             try {
                 boolean checkAccount=validatePassword(password,account.getPassword());
-                if(checkAccount){
+                String role=account.getRole();
+                boolean checkRoleUser=account.getRole().equals("user");
+                boolean checkRoleAdmin=account.getRole().equals("admin");
+                if(checkAccount && account.getRole().equals("user")){
                     request.getSession().setAttribute("loggedInUser", account);
-                    out.print("success");
-                }
-                else{
+                    out.print("user");
+                } else if (checkAccount && account.getRole().equals("admin")) {
+                    out.print("admin");
+
+                } else{
                     out.print("failure");
                 }
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeySpecException e) {
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                 throw new RuntimeException(e);
             }
 

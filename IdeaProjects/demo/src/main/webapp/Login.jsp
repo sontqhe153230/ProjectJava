@@ -110,14 +110,24 @@
                 url: "Login",
                 data: formData,
                 success: function(response){
-                    if(response.trim() === "success") {
+                    if(response.trim() === "user") {
                         // Show success message
                         swal("Good job!", "Login successful!", "success")
                             .then((value) => {
                                 // Redirect to another page
                                 window.location.href = "/Shop-Clothes";
                             });
-                    } else {
+                    }
+                   else if(response.trim() === "admin") {
+                        // Show success message
+                        swal("Good job!", "Login successful!", "success")
+                            .then((value) => {
+                                // Redirect to another page
+                                window.location.href = "Admin";
+
+                            });
+                    }
+                    else {
                         swal("Wrong username or password!", "Please try again.", "error");
                     }
                 },
