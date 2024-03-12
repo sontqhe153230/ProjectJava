@@ -1,4 +1,8 @@
 <%@ page import="model.entity.Product" %>
+<%@ page import="java.util.List" %>
+<%@ page import="model.entity.Size" %>
+<%@ page import="controller.ProductDetailServlet" %>
+<%@ page import="model.entity.Color" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,7 +97,28 @@
                     </ul>
                     <span><%= product.getDescription()%></span>
 
+
+
+
+
+
                     <div class="quantity-content">
+                      <h3>Size</h3>
+                        <%
+                            List<Size> sizes= (List<Size>) new ProductDetailServlet().getAllSizeByProductId(product.getProductID());
+                            for (int i=0;i<sizes.size();i++) {
+                        %>
+                        <input type="radio"  id="size<%=i%>"  name="size<%=i%>" value="<%=sizes.get(i).getSizeID()%>">
+                        <label for="<%=sizes.get(i).getSize()%>"><%=sizes.get(i).getSize()%></label><br>
+                        <%}%>
+                        <h3>Color</h3>
+                        <%
+                            List<Color> colors = (List<Color>) new ProductDetailServlet().getAllColorByProductId(product.getProductID());
+                            for (int i=0;i<colors.size();i++) {
+                        %>
+                        <input type="radio" id="color<%=i%>" name="color<%=i%>" value="<%=colors.get(i).getColorID()%>">
+                        <label for="<%=colors.get(i).getColor()%>"><%=colors.get(i).getColor()%></label><br>
+                        <%}%>
                         <div class="left-content">
                             <h6>No. of Orders</h6>
                         </div>
@@ -105,7 +130,7 @@
                     </div>
                     <div class="total">
                         <h4>Total: $210.00</h4>
-                        <div class="main-border-button"><a href="javascript:void(0);" onclick="addToCart(<%= product.getProductID()%>)">Add To Cart</a></div>
+                        <div class="main-border-button"><a href="javascript:void(0);"onchange="addToCart(<%= product.getProductID()%>,<%= sizes.size()%>,<%= colors.size()%>)" onclick="addToCart(<%= product.getProductID()%>,<%= sizes.size()%>,<%= colors.size()%>)">Add To Cart</a></div>
                     </div>
                 </div>
             </div>
@@ -126,7 +151,7 @@
 <!-- Bootstrap -->
 <script src="assets/js/popper.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Plugins -->
 <script src="assets/js/owl-carousel.js"></script>
 <script src="assets/js/accordions.js"></script>
@@ -158,13 +183,53 @@
 
         });
     });
-    function addToCart(productId) {
+    function addToCart(productId,size,color) {
+        console.log(size,color);
+        var isCheckSizeSelect=false;
+        var isCheckColorSelect=false;
+        var sizeSelect="";
+        var colorSelect="";
+        for(let i=0;i<size;i++){
+         var SizeName="size"+i ;
+            console.log(SizeName);
+            var radios = document.getElementById(SizeName);
+            console.log(radios);
+         if(radios.checked){
+             isCheckSizeSelect=true;
+             sizeSelect=radios.value;
+             console.log(sizeSelect,isCheckSizeSelect);
+         }
+        }
+        for(let i=0;i<color;i++){
+            var ColorName="color"+i ;
+            var radios2 = document.getElementById(ColorName);
+            if(radios2.checked){
+                isCheckColorSelect=true;
+                colorSelect=radios2.value;
+                console.log(colorSelect,isCheckColorSelect);
+            }
+        }
+
+
         var qualityValue = document.querySelector('input[name="quantity"]').value;
         console.log(qualityValue);
-        var url = "Cart?id=" + productId + "&quantity=" + qualityValue;
-        console.log(url); // Just for testing, you can modify this to send the URL wherever you need
-        // Here you can perform any further actions with the constructed URL, like sending a request
-        window.location.href = url;
+
+        if(isCheckSizeSelect===false && isCheckColorSelect===false){
+            swal("Error!", "Please Select Size and Color", "error");
+        }
+        else if(isCheckSizeSelect===false){
+            swal("Error!", "Please Select Size", "error");
+        }
+       else if(isCheckColorSelect===false){
+            swal("Error!", "Please Select Color", "error");
+        }
+       else{
+            var url = "Cart?id=" + productId + "&quantity=" + qualityValue+ "&size="+sizeSelect+"&color="+colorSelect;
+            console.log(url); // Just for testing, you can modify this to send the URL wherever you need
+            // Here you can perform any further actions with the constructed URL, like sending a request
+            window.location.href = url;
+        }
+
     }
 </script>
 

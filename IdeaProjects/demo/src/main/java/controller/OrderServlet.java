@@ -3,8 +3,12 @@ package controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import model.dao.ColorDAO;
 import model.dao.ProductDAO;
+import model.dao.SizeDAO;
+import model.entity.Color;
 import model.entity.Product;
+import model.entity.Size;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,41 +21,49 @@ public class OrderServlet  extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(true);
-        //check nếu chưa đăng nhap ,quay lai trang dang nhap
-        if(session.getAttribute("loggedInUser")==""||session.getAttribute("loggedInUser")==null){
+// Check if the user is logged in, if not, redirect to the login page
+        if (session.getAttribute("loggedInUser") == null || session.getAttribute("loggedInUser").equals("")) {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
 
-        if(request.getParameter("id")==null||request.getParameter("id")==""
-        ||request.getParameter("quantity")==null||request.getParameter("quantity")==""
-        ){
-            response.sendRedirect("Cart.jsp");
-        }
-        else{
-            // Lấy id sản phẩm và số lượng từ request
+        if (request.getParameter("id") == null || request.getParameter("id").equals("")
+                || request.getParameter("quantity") == null || request.getParameter("quantity").equals("")
+                || request.getParameter("size") == null || request.getParameter("size").equals("")
+                || request.getParameter("color") == null || request.getParameter("color").equals("")) {
+            request.getRequestDispatcher("Cart.jsp").forward(request, response);
+        } else {
+            // Get product ID, quantity, size, and color from the request
             int productId = Integer.parseInt(request.getParameter("id"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int size = Integer.parseInt(request.getParameter("size"));
+            int color = Integer.parseInt(request.getParameter("color"));
 
-            // Lấy hoặc tạo giỏ hàng từ session
-            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+            // Get or create the cart from session
+            Map<Integer, Map<String, Object>> cart = (Map<Integer, Map<String, Object>>) session.getAttribute("cart");
             if (cart == null) {
                 cart = new HashMap<>();
                 session.setAttribute("cart", cart);
             }
 
-            // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+            // Check if the product already exists in the cart
             if (cart.containsKey(productId)) {
-                // Nếu đã tồn tại, cập nhật số lượng
-                int existingQuantity = cart.get(productId);
-                cart.put(productId, existingQuantity + quantity);
+                // If the product already exists, update the quantity
+                Map<String, Object> productInfo = cart.get(productId);
+                int existingQuantity = (int) productInfo.get("quantity");
+                productInfo.put("quantity", existingQuantity + quantity);
             } else {
-                // Nếu chưa tồn tại, thêm sản phẩm mới vào giỏ hàng
-                cart.put(productId, quantity);
+                // If the product does not exist, add it to the cart
+                Map<String, Object> productInfo = new HashMap<>();
+                productInfo.put("quantity", quantity);
+                productInfo.put("size", size);
+                productInfo.put("color", color);
+                cart.put(productId, productInfo);
             }
 
-            // Chuyển hướng đến trang giỏ hàng
-            response.sendRedirect("Cart.jsp"); // Chuyển hướng đến trang giỏ hàng
+            // Redirect to the cart page
+            request.getRequestDispatcher("Cart.jsp").forward(request, response);
         }
+
 
 
     }
@@ -108,6 +120,90 @@ public class OrderServlet  extends HttpServlet {
         }
     }
 
+    public Size GetSizeById(int id){
+        SizeDAO sizeDAO = null;
+        try {
+            sizeDAO = new SizeDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        List<Size> sizeList = sizeDAO.getAllSizes();
+
+        // Khởi tạo biến để lưu trữ sản phẩm tìm thấy
+        Size foundSize = null;
+
+        // Lặp qua productList để tìm sản phẩm có ID phù hợp
+        for (Size size : sizeList) {
+            if (size.getProductID() == id) {
+                foundSize = size;
+                break; // Dừng lặp khi tìm thấy sản phẩm
+            }
+        }
+
+        // Kiểm tra xem sản phẩm có được tìm thấy không
+        if (foundSize != null) {
+            // Nếu tìm thấy, đặt sản phẩm vào thuộc tính của request
+            return foundSize;
+        } else {
+            // Nếu không tìm thấy, xử lý trường hợp (ví dụ: hiển thị thông báo lỗi)
+            // Bạn có thể chuyển hướng đến trang lỗi hoặc xử lý nó bằng bất kỳ cách nào phù hợp khác
+            // Ví dụ:
+            return null;
+        }
+    }
+
+    public Color GetColorById(int id){
+        ColorDAO colorDAO = null;
+        try {
+            colorDAO = new ColorDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        List<Color> colorList = colorDAO.getAllColors();
+
+        // Khởi tạo biến để lưu trữ sản phẩm tìm thấy
+        Color foundColor = null;
+
+        // Lặp qua productList để tìm sản phẩm có ID phù hợp
+        for (Color color : colorList) {
+            if (color.getProductID() == id) {
+                foundColor = color;
+                break; // Dừng lặp khi tìm thấy sản phẩm
+            }
+        }
+
+        // Kiểm tra xem sản phẩm có được tìm thấy không
+        if (foundColor != null) {
+            // Nếu tìm thấy, đặt sản phẩm vào thuộc tính của request
+            return foundColor;
+        } else {
+            // Nếu không tìm thấy, xử lý trường hợp (ví dụ: hiển thị thông báo lỗi)
+            // Bạn có thể chuyển hướng đến trang lỗi hoặc xử lý nó bằng bất kỳ cách nào phù hợp khác
+            // Ví dụ:
+            return null;
+        }
+    }
+
+    public String GetColorTypeById(int id){
+        Color p= GetColorById(id);
+        if(p!=null){
+            return p.getColor();
+        }
+        return "";
+    }
+
+    public String GetSizeTypeById(int id){
+        Size p= GetSizeById(id);
+        if(p!=null){
+            return p.getSize();
+        }
+        return "";
+    }
+
 //hàm xử lí khi fe chuyển id về để get name( new OrderServlet().GetNameById(productId)--> bên FE)
     public String GetNameById(int id) {
       Product p= GetProductById(id);
@@ -147,16 +243,19 @@ public class OrderServlet  extends HttpServlet {
     }
 
 
-    public BigDecimal GetOfTotalCart(Map<Integer, Integer> cart){
+    public BigDecimal GetOfTotalCart(Map<Integer, Map<String, Object>> cart){
          BigDecimal total=BigDecimal.ZERO;
         // Lấy  giỏ hàng từ session
         if (cart != null) {
             // Lặp qua mỗi mục trong giỏ hàng và hiển thị
-            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            for (Map.Entry<Integer, Map<String, Object>> entry : cart.entrySet()) {
                 int productId = entry.getKey();
-                int quantity = entry.getValue();
-              total=total.add(GetTotalPrice(productId,quantity));
+                int quantity = (int) entry.getValue().get("quantity");
+
+
+                total=total.add(GetTotalPrice(productId,quantity));
             }
+
             return total;
         }
         return null;

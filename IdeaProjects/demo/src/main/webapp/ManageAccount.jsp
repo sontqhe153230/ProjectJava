@@ -35,8 +35,8 @@
                             <div class="col-sm-8"><h2>Manage <b>Account</b></h2></div>
                             <div class="col-sm-4">
                                 <div class="search-box">
-                                    <i class="material-icons">&#xE8B6;</i>
-                                    <input type="text" class="form-control" placeholder="Search&hellip;">
+                                    <a href="AddNewProduct" class="add-button">
+                                        Add new </a>
                                 </div>
                             </div>
                         </div>

@@ -65,15 +65,16 @@
 
                 <div class="card border shadow-none">
                     <%
-                        // Lấy giỏ hàng từ session
-                        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+                        Map<Integer, Map<String, Object>> cart = (Map<Integer, Map<String, Object>>) session.getAttribute("cart");
                         if (cart != null) {
-                            // Lặp qua mỗi mục trong giỏ hàng và hiển thị
-                            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+                            // Loop through each item in the cart and display its details
+                            for (Map.Entry<Integer, Map<String, Object>> entry : cart.entrySet()) {
                                 int productId = entry.getKey();
-                                int quantity = entry.getValue();
+                                int quantity = (int) entry.getValue().get("quantity");
+                                int size = (int) entry.getValue().get("size");
+                                int color = (int) entry.getValue().get("color");
 
-
+                                // Now you can display the product ID, quantity, size, and color
                     %>
                     <div class="card-body">
 
@@ -91,7 +92,8 @@
                                         <i class="bx bxs-star text-warning"></i>
                                         <i class="bx bxs-star-half text-warning"></i>
                                     </p>
-                                    <p class="mb-0 mt-1">Color : <span class="fw-medium">Gray</span></p>
+                                    <p class="mb-0 mt-1">Color : <span class="fw-medium"><%= new OrderServlet().GetColorTypeById(color) %></span></p>
+                                    <p class="mb-0 mt-1">Size : <span class="fw-medium"><%= new OrderServlet().GetSizeTypeById(size) %></span></p>
                                 </div>
                             </div>
                             <div class="flex-shrink-0 ms-2">
@@ -147,10 +149,7 @@
                 </div>
                 <!-- end card -->
 
-                    <%
-                        // Lấy giỏ hàng từ session
-                        Map<Integer, Integer> cart2 = (Map<Integer, Integer>) session.getAttribute("cart");
-                        if (cart != null) { %>
+
                 <div class="row my-4">
                     <div class="col-sm-6">
                         <a href="/Shop-Clothes" class="btn btn-link text-muted">
@@ -164,12 +163,12 @@
                     </div> <!-- end col -->
                 </div> <!-- end row-->
 
-                <%}%>
+
             </div>
             <%
                 // Lấy giỏ hàng từ session
-                Map<Integer, Integer> cart3 = (Map<Integer, Integer>) session.getAttribute("cart");
-                if (cart != null) { %>
+                Map<Integer, Map<String, Object>> cart2 = (Map<Integer, Map<String, Object>>) session.getAttribute("cart");
+                if (cart2 != null) { %>
             <div class="col-xl-4">
                 <div class="mt-5 mt-lg-0">
                     <div class="card border shadow-none">
@@ -187,7 +186,7 @@
                                         <th>Total :</th>
                                         <td class="text-end">
                                             <span class="fw-bold">
-                                                $ <%= new OrderServlet().GetOfTotalCart(cart3) %>
+                                                $ <%= new OrderServlet().GetOfTotalCart(cart2) %>
                                             </span>
                                         </td>
                                     </tr>

@@ -2,9 +2,8 @@ package model.dao;
 
 import model.entity.Product;
 import util.DBConnect;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +41,32 @@ public class ProductDAO {
             }
         }
         return productList;
+    }
+
+    public boolean addProduct(Product product) {
+        String sql = "INSERT INTO Product (ProductName, Price, IMG, Description, CreatedDate, CreatedBy,UpdatedDate,UpdateBy,IsDelete,DeletedDate,DeletedBy) VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Setting parameters for the PreparedStatement
+            preparedStatement.setString(1, product.getProductName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
+            preparedStatement.setString(3, product.getIMG());
+            preparedStatement.setString(4, product.getDescription());
+            preparedStatement.setDate(5, product.getCreatedDate());
+            preparedStatement.setString(6, product.getCreatedBy());
+            preparedStatement.setDate(7, product.getUpdatedDate());
+            preparedStatement.setString(8, product.getUpdatedBy());
+            preparedStatement.setBoolean(9, product.isDelete());
+            preparedStatement.setDate(10, product.getDeletedDate());
+            preparedStatement.setString(11, product.getDeletedBy());
+            // Executing the query
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Checking if the query was successful
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

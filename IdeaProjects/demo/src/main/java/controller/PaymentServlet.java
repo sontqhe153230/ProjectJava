@@ -34,7 +34,7 @@ public class PaymentServlet extends HttpServlet {
         String status = request.getParameter("status");
         if(status!=""){
             HttpSession session = request.getSession(true);
-            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+            Map<Integer, Map<String, Object>> cart = (Map<Integer, Map<String, Object>>) session.getAttribute("cart");
 
             if (cart != null) {
                 // Do something with the cart
@@ -47,9 +47,11 @@ public class PaymentServlet extends HttpServlet {
                     throw new RuntimeException(e);
                 }
 
-                for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-                    Integer productId = entry.getKey();
-                    Integer quantity = entry.getValue();
+                for (Map.Entry<Integer, Map<String, Object>> entry : cart.entrySet()) {
+                    int productId = entry.getKey();
+                    int quantity = (int) entry.getValue().get("quantity");
+                    int size = (int) entry.getValue().get("size");
+                    int color = (int) entry.getValue().get("color");
                     int OrderId=RandomNumber();
                     if(checkOrderIdExist(OrderId)){
                         OrderId=RandomNumber();
@@ -62,7 +64,7 @@ public class PaymentServlet extends HttpServlet {
                     java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
                     String CreateBy="user";
 
-                    Order newOrder=new Order(OrderId,productId,CustomerId,quantity,description,false,"Pending",currentDateSql,CreateBy,null,null,false,null,null);
+                    Order newOrder=new Order(OrderId,productId,CustomerId,quantity,description,false,"Pending",currentDateSql,CreateBy,null,null,false,null,null,size,color);
 
                     boolean idAddSuccess=orderDAO.addOrder(newOrder);
                     response.setContentType("text/plain");

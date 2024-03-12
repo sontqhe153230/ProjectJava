@@ -5,10 +5,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.dao.ColorDAO;
 import model.dao.ProductDAO;
+import model.dao.SizeDAO;
+import model.entity.Color;
 import model.entity.Product;
+import model.entity.Size;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 @WebServlet(name ="ProductDetailServlet", value = "/product-detail")
 
@@ -55,5 +60,71 @@ public class ProductDetailServlet extends HttpServlet {
 
         // Chuyển tiếp request đến trang "ProductDetail.jsp"
         request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
+    }
+
+    public List<Size>getAllSizeByProductId(int id){
+        SizeDAO sizeDAO = null;
+        try {
+            sizeDAO = new SizeDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        List<Size> sizeList = sizeDAO.getAllSizes();
+
+        // Khởi tạo biến để lưu trữ sản phẩm tìm thấy
+        List<Size> foundSize  = new ArrayList<>();;
+
+        // Lặp qua productList để tìm sản phẩm có ID phù hợp
+        for (Size size : sizeList) {
+            if (size.getProductID() == id) {
+                foundSize.add(size);
+
+            }
+        }
+        // Kiểm tra xem sản phẩm có được tìm thấy không
+        if (foundSize != null) {
+            // Nếu tìm thấy, đặt sản phẩm vào thuộc tính của request
+           return foundSize;
+        } else {
+            // Nếu không tìm thấy, xử lý trường hợp (ví dụ: hiển thị thông báo lỗi)
+            // Bạn có thể chuyển hướng đến trang lỗi hoặc xử lý nó bằng bất kỳ cách nào phù hợp khác
+            // Ví dụ:
+           return null;
+        }
+    }
+
+    public List<Color>getAllColorByProductId(int id){
+        ColorDAO colorDAO = null;
+        try {
+            colorDAO = new ColorDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        List<Color> colorList = colorDAO.getAllColors();
+
+        // Khởi tạo biến để lưu trữ sản phẩm tìm thấy
+        List<Color> foundColor = new ArrayList<>();;
+
+        // Lặp qua productList để tìm sản phẩm có ID phù hợp
+        for (Color color : colorList) {
+            if (color.getProductID() == id) {
+                foundColor.add(color);
+                break; // Dừng lặp khi tìm thấy sản phẩm
+            }
+        }
+        // Kiểm tra xem sản phẩm có được tìm thấy không
+        if (foundColor != null) {
+            // Nếu tìm thấy, đặt sản phẩm vào thuộc tính của request
+            return foundColor;
+        } else {
+            // Nếu không tìm thấy, xử lý trường hợp (ví dụ: hiển thị thông báo lỗi)
+            // Bạn có thể chuyển hướng đến trang lỗi hoặc xử lý nó bằng bất kỳ cách nào phù hợp khác
+            // Ví dụ:
+            return null;
+        }
     }
 }

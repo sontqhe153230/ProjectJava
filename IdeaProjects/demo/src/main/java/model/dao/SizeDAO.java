@@ -4,9 +4,7 @@ import model.entity.ProductType;
 import model.entity.Size;
 import util.DBConnect;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,4 +38,29 @@ public class SizeDAO {
         }
         return sizes;
     }
+    public void addSize(Size size) {
+        if (connection != null && size != null) {
+            String sql = "INSERT INTO Size (Size, ProductID, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy, IsDelete, DeletedDate, DeletedBy) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            try {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, size.getSize());
+                statement.setInt(2, size.getProductID());
+                statement.setDate(3, new java.sql.Date(size.getCreatedDate().getTime()));
+                statement.setString(4, size.getCreatedBy());
+                statement.setDate(5, new java.sql.Date(size.getUpdatedDate().getTime()));
+                statement.setString(6, size.getUpdatedBy());
+                statement.setBoolean(7, size.isDelete());
+                statement.setDate(8, size.getDeletedDate() != null ? new java.sql.Date(size.getDeletedDate().getTime()) : null);
+                statement.setString(9, size.getDeletedBy());
+
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("A new size was added successfully!");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

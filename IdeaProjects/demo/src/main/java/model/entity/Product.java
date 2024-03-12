@@ -84,8 +84,8 @@ public class Product {
         Description = description;
     }
 
-    public Date getCreatedDate() {
-        return CreatedDate;
+    public java.sql.Date getCreatedDate() {
+        return (java.sql.Date) CreatedDate;
     }
 
     public void setCreatedDate(Date createdDate) {
@@ -100,8 +100,8 @@ public class Product {
         CreatedBy = createdBy;
     }
 
-    public Date getUpdatedDate() {
-        return UpdatedDate;
+    public java.sql.Date getUpdatedDate() {
+        return (java.sql.Date) UpdatedDate;
     }
 
     public void setUpdatedDate(Date updatedDate) {
@@ -124,8 +124,8 @@ public class Product {
         IsDelete = deleted;
     }
 
-    public Date getDeletedDate() {
-        return DeletedDate;
+    public java.sql.Date getDeletedDate() {
+        return (java.sql.Date) DeletedDate;
     }
 
     public void setDeletedDate(Date deletedDate) {

@@ -17,9 +17,11 @@ public class Order {
     private boolean IsDelete;
     private Date DeletedDate;
     private String DeletedBy;
-
+    private int SizeId;
+    private int ColorId;
     public Order(){}
-    public Order(int orderId, int productId, int customerID, int quantity, String description, boolean isPayment, String deliveryStatus, Date createdDate, String createdBy, Date updatedDate, String updatedBy, boolean isDelete, Date deletedDate, String deletedBy) {
+
+    public Order(int orderId, int productId, int customerID, int quantity, String description, boolean isPayment, String deliveryStatus, Date createdDate, String createdBy, Date updatedDate, String updatedBy, boolean isDelete, Date deletedDate, String deletedBy, int sizeId, int colorId) {
         OrderId = orderId;
         ProductId = productId;
         CustomerID = customerID;
@@ -34,6 +36,8 @@ public class Order {
         IsDelete = isDelete;
         DeletedDate = deletedDate;
         DeletedBy = deletedBy;
+        SizeId = sizeId;
+        ColorId = colorId;
     }
 
     public int getOrderId() {
@@ -146,5 +150,21 @@ public class Order {
 
     public void setDeletedBy(String deletedBy) {
         DeletedBy = deletedBy;
+    }
+
+    public int getSizeId() {
+        return SizeId;
+    }
+
+    public void setSizeId(int sizeId) {
+        SizeId = sizeId;
+    }
+
+    public int getColorId() {
+        return ColorId;
+    }
+
+    public void setColorId(int colorId) {
+        ColorId = colorId;
     }
 }

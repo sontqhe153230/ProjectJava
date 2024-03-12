@@ -37,6 +37,8 @@ public class OrderDAO {
                     order.setDelete(resultSet.getBoolean("IsDelete"));
                     order.setDeletedDate(resultSet.getDate("DeletedDate"));
                     order.setDeletedBy(resultSet.getString("DeletedBy"));
+                    order.setSizeId(resultSet.getInt("SizeId"));
+                    order.setColorId(resultSet.getInt("ColorId"));
                     orderList.add(order);
                 }
             } catch (Exception e) {
@@ -47,7 +49,7 @@ public class OrderDAO {
     }
     public boolean addOrder(Order newOrder) {
         if (connection != null && newOrder != null) {
-            String sql = "INSERT INTO [Orders] (ProductID, CustomerID, Quantity, Description, IsPayment, DeliveryStatus, CreatedDate, CreatedBy,UpdatedDate,UpdatedBy,IsDelete,DeletedDate,DeletedBy) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO [Orders] (ProductID, CustomerID, Quantity, Description, IsPayment, DeliveryStatus, CreatedDate, CreatedBy,UpdatedDate,UpdatedBy,IsDelete,DeletedDate,DeletedBy,SizeId,ColorId) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?)";
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setInt(1, newOrder.getProductId());
@@ -63,6 +65,8 @@ public class OrderDAO {
                 preparedStatement.setBoolean(11, newOrder.isDelete());
                 preparedStatement.setDate(12, newOrder.getDeletedDate());
                 preparedStatement.setString(13, newOrder.getDeletedBy());
+                preparedStatement.setInt(14, newOrder.getSizeId());
+                preparedStatement.setInt(15, newOrder.getColorId());
 
                 int rowsAffected = preparedStatement.executeUpdate();
                 if (rowsAffected > 0) {
