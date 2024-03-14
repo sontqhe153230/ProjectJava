@@ -58,6 +58,7 @@
                         <%
                             List<Order> orders = (List<Order>) request.getAttribute("orderList");
                             for (Order order : orders) {
+                                if(!order.isDelete()){
                         %>
                         <tr>
 
@@ -75,7 +76,7 @@
                             </td>
                         </tr>
                         <%}%>
-
+                        <%}%>
                         </tbody>
                     </table>
                     <div class="clearfix">

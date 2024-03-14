@@ -35,8 +35,8 @@
                             <div class="col-sm-8"><h2>Manage <b>Product</b></h2></div>
                             <div class="col-sm-4">
                                 <div class="search-box">
-                                    <i class="material-icons">&#xE8B6;</i>
-                                    <input type="text" class="form-control" placeholder="Search&hellip;">
+                                    <a href="AddNewProduct" class="add-button">
+                                        Add new </a>
                                 </div>
                             </div>
                         </div>
@@ -48,8 +48,7 @@
                             <th>Product Name </th>
                             <th>Price</th>
                             <th>Description </th>
-                            <th>Size</th>
-                            <th>Color </th>
+
                             <th>CreateDate</th>
                         </tr>
                         </thead>
@@ -57,21 +56,22 @@
                         <%
                             List<Product> products = (List<Product>) request.getAttribute("productList");
                             for (Product product : products) {
+                               if(!product.isDelete()){
                         %>
                         <tr>
                             <td><%= product.getProductID()%></td>
                             <td><%= product.getProductName()%></td>
                             <td><%= product.getPrice()%></td>
                             <td><%= product.getDescription()%></td>
-                            <td><%= new AdminManageProductServlet().GetSizeByProductId(product.getProductID())%></td>
-                            <td><%= new AdminManageProductServlet().GetColorByProductId(product.getProductID())%></td>
                             <td><%= product.getCreatedDate()%></td>
                             <td>
-                                <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                <a href="ViewDetailProduct?pid=<%= product.getProductID()%>" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                <a href="UpdateProduct?pid=<%= product.getProductID()%>" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                             </td>
                         </tr>
                       <%}%>
+                        <%}%>
                         </tbody>
                     </table>
                     <div class="clearfix">

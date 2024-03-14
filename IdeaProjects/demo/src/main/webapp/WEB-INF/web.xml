@@ -5,9 +5,45 @@
         <servlet-name>AdminManageAccountServlet</servlet-name>
         <servlet-class>controller.AdminManageAccountServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddNewProductServlet</servlet-name>
+        <servlet-class>controller.AddNewProductServlet</servlet-class>
+        <multipart-config>
+            <!-- Configuration options -->
+        </multipart-config>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewDetailProductServlet</servlet-name>
+        <servlet-class>controller.ViewDetailProductServlet</servlet-class>
+        <multipart-config>
+            <!-- Configuration options -->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewDetailProductServlet</servlet-name>
+        <url-pattern>/ViewDetailProduct</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <servlet-class>controller.UpdateProductServlet</servlet-class>
+        <multipart-config>
+            <!-- Configuration options -->
+        </multipart-config>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <url-pattern>/UpdateProduct</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>AdminManageAccountServlet</servlet-name>
         <url-pattern>/Admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddNewProductServlet</servlet-name>
+        <url-pattern>/AddNewProduct</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

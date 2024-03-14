@@ -32,3 +32,9 @@ body{
     max-width: 100%;
     max-height: inherit;
 }
+
+
+select {
+    width: 200px;
+    padding: 5px;
+}

@@ -44,7 +44,7 @@ public class AppStartupListener implements ServletContextListener {
         if (accountDAO.existsByUsername(username)) {
             accountDAO.updatePassword(username, hashedPassword, role);
         } else {
-            AccountDAO.createAccount(username, hashedPassword);
+            AccountDAO.createAccount(username, hashedPassword,"admin");
         }
     }
 
@@ -64,7 +64,7 @@ public class AppStartupListener implements ServletContextListener {
         if (accountDAO.existsByUsername(username)) {
             accountDAO.updatePassword(username, hashedPassword, role);
         } else {
-            accountDAO.createAccount(username, hashedPassword);
+            accountDAO.createAccount(username, hashedPassword,"user");
         }
     }
 

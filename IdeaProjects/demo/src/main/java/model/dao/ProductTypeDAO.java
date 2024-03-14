@@ -63,4 +63,30 @@ public class ProductTypeDAO {
             e.printStackTrace();
             return false;
         }
-    }}
+    }
+    public boolean updateProductType(ProductType productType) {
+        String sql = "UPDATE ProductType SET TypeName=?, CreatedDate=?, CreatedBy=?, UpdatedDate=?, UpdatedBy=?, IsDelete=?, DeletedDate=?, DeletedBy=? WHERE TyoeID=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            // Setting parameters for the PreparedStatement
+            preparedStatement.setString(1, productType.getTypeName());
+            preparedStatement.setObject(2, productType.getCreatedDate());
+            preparedStatement.setString(3, productType.getCreatedBy());
+            preparedStatement.setObject(4, productType.getUpdatedDate());
+            preparedStatement.setString(5, productType.getUpdatedBy());
+            preparedStatement.setBoolean(6, productType.isDelete());
+            preparedStatement.setObject(7, productType.getDeletedDate());
+            preparedStatement.setString(8, productType.getDeletedBy());
+            preparedStatement.setInt(9, productType.getProductID());
+
+            // Executing the query
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Checking if the query was successful
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}

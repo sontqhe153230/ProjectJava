@@ -17,14 +17,14 @@ public class AccountDAO {
     PasswordUtil passwordUtil = new PasswordUtil();
     public AccountDAO() throws Exception {
     }
-    public static boolean createAccount(String username, String password) {
+    public static boolean createAccount(String username, String password,String role) {
         if (connection != null) {
             try {
                 String sql = "INSERT INTO Account (username, password, role, createdDate, createdBy) VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
-                preparedStatement.setString(3, "user");
+                preparedStatement.setString(3, role);
                 preparedStatement.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
                 preparedStatement.setString(5, username);
 

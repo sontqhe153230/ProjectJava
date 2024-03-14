@@ -59,6 +59,7 @@
                         <%
                             List<Account> accounts = (List<Account>) request.getAttribute("accountList");
                             for (Account account : accounts) {
+                                if(!account.isIdDelete()){
                         %>
                         <tr>
                             <td><%= account.getAccountId()%></td>
@@ -75,6 +76,7 @@
                             </td>
                         </tr>
                          <%}%>
+                        <%}%>
                         </tbody>
                     </table>
                     <div class="clearfix">

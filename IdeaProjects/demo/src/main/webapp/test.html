@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Options with Images</title>
+    <style>
+        input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .option-image {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <input type="text" id="textInput" placeholder="Enter text and press Enter">
+    <input type="file" id="imageInput">
+    <select id="optionsList">
+        <!-- Options will be dynamically added here -->
+    </select>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const textInput = document.getElementById('textInput');
+        const imageInput = document.getElementById('imageInput');
+        const optionsList = document.getElementById('optionsList');
+
+        textInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+
+                const inputValue = textInput.value.trim();
+                if (inputValue !== '') {
+                    const option = document.createElement('option');
+                    option.value = inputValue;
+                    option.text = inputValue;
+
+                    optionsList.appendChild(option);
+
+                    textInput.value = ''; // Clear input field after adding option
+                    imageInput.value = ''; // Clear image input field after adding option
+                }
+            }
+        });
+
+        imageInput.addEventListener('change', function() {
+            const inputValue = textInput.value.trim();
+            const imageFile = imageInput.files[0];
+            const imageName = imageFile ? imageFile.name : '';
+            const optionText = inputValue + (inputValue && imageName ? ', ' : '') + imageName;
+
+            if (optionText !== '') {
+                const option = document.createElement('option');
+                option.value = optionText;
+                option.text = optionText;
+
+                // Add image to the option if available
+                if (imageName) {
+                    const imageUrl = URL.createObjectURL(imageFile);
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = inputValue;
+                    img.className = 'option-image';
+                    option.appendChild(img);
+                }
+
+                optionsList.appendChild(option);
+
+                textInput.value = ''; // Clear input field after adding option
+                imageInput.value = ''; // Clear image input field after adding option
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
