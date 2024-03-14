@@ -75,7 +75,7 @@ public class UpdateProductServlet extends HttpServlet {
             // Get the name of the uploaded file
             Part filePartLocal = request.getPart("images");
             if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
-                relativePath = ConvertIMG.saveImage(filePart, request, "images"); // Nếu có, lưu hình ảnh mới
+                relativePath = ConvertIMG.saveImage(filePart, request, "assets/images"); // Nếu có, lưu hình ảnh mới
             } else {
                 relativePath = product.getIMG(); // Nếu không, giữ nguyên hình ảnh hiện tại
             }

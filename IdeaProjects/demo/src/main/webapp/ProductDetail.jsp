@@ -80,7 +80,7 @@
             %>
             <div class="col-lg-8">
                 <div class="left-images">
-                    <img src="assets/images/<%= product.getIMG()%>" alt="">
+                    <img src="<%= product.getIMG()%>" alt="">
 
                 </div>
             </div>

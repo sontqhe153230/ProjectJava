@@ -19,6 +19,6 @@ public class ConvertIMG {
         }
         String filePath = savePath + File.separator + fileName;
         filePart.write(filePath);
-        return   File.separator + fileName;
+        return  saveDir+ File.separator + fileName;
     }
 }

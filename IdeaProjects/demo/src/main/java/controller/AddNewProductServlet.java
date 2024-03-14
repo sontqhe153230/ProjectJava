@@ -105,7 +105,7 @@ public class AddNewProductServlet extends HttpServlet {
             // Get the name of the uploaded file
             Part filePartLocal = request.getPart("images");
             if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
-                filename = ConvertIMG.saveImage(filePart, request, "images"); // Nếu có, lưu hình ảnh mới
+                filename = ConvertIMG.saveImage(filePart, request, "assets/images"); // Nếu có, lưu hình ảnh mới
             }
             out.print("Please fill all input");
         }
