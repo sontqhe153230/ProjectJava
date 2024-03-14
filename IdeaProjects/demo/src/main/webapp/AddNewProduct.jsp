@@ -84,7 +84,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Color</label>
                                 <input type="text" id="textInputColor" placeholder="Enter text and press Enter">
-                                <input type="file" id="imageInputColor">
+                                <input type="file" id="imageInputColor" hidden>
                                 <select id="optionsListColor">
                                     <!-- Options will be dynamically added here -->
                                 </select>
@@ -316,6 +316,7 @@
                 contentType: false,  // Prevent jQuery from setting the content type
 
                 success: function(response){
+                    console.log(response);
                     if(response.trim() === "success") {
                         // Show success message
                         swal("Good job!", "Add New Product Success", "success")

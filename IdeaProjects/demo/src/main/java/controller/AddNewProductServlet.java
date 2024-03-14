@@ -107,9 +107,8 @@ public class AddNewProductServlet extends HttpServlet {
             if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
                 filename = ConvertIMG.saveImage(filePart, request, "assets/images"); // Nếu có, lưu hình ảnh mới
             }
-            out.print("Please fill all input");
         }
-        if(productName==null || productName.isEmpty() ||description==null|| description.isEmpty() ||price==null|| price.isEmpty() || Objects.equals(filename, "") || optionsSizeJson.isEmpty()||optionsProductTypeJson.isEmpty()){
+        if(productName==null || productName.isEmpty() ||description==null|| description.isEmpty() ||price==null|| price.isEmpty() || optionsSizeJson.isEmpty()||optionsProductTypeJson.isEmpty()){
             out.print("Please fill all input");
         }
         else if(!isPriceTrue){

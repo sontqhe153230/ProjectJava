@@ -12,6 +12,10 @@
             <li>
                 <a href="AdminManageProduct">Product</a>
             </li>
+            <li>
+                <a href="Logout">Logout</a>
+            </li>
+        </ul>
 </ul>
     </div>
 </nav>
