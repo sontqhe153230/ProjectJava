@@ -254,7 +254,7 @@
         swal("Complete!", "Order successful!", "success")
             .then((value) => {
                 // Redirect to another page
-                window.location.href = "/Shop-Clothes";
+                window.location.href = "/ClothesShop";
             });
 
     }

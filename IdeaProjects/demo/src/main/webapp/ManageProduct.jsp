@@ -67,7 +67,7 @@
                             <td>
                                 <a href="ViewDetailProduct?pid=<%= product.getProductID()%>" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
                                 <a href="UpdateProduct?pid=<%= product.getProductID()%>" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                <a href="#" onclick="ConfirmDelete(<%= product.getProductID()%>)" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                             </td>
                         </tr>
                       <%}%>
@@ -91,10 +91,40 @@
         </div>
     </div>
 </div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/main.js"></script>
+<script>
+   function ConfirmDelete(id){
+       swal({
+           title: "Are you sure?",
+           text: "Once deleted, you will not be able to recover this imaginary file!",
+           icon: "warning",
+           buttons: true,
+           dangerMode: true,
+       })
+           .then((willDelete) => {
+               if (willDelete) {
+                   swal("Poof! Your product has been deleted!", {
+                       icon: "success",
+                   })
+                       .then((value) => {
+                           // Redirect to another page
+                           window.location.href = "/ClothesShop/DeleteProduct?pid="+id;
+                       });
+                   ;
+               } else {
+                   swal("Your imaginary file is safe!");
+               }
+           });
+
+
+   }
+
+</script>
+
 </body>
 </html>

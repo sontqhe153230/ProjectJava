@@ -22,13 +22,13 @@ public class Account {
     private String CreateBy;
     private Date UpdatedDate;
     private String UpdatedBy;
-    private boolean idDelete;
+    private boolean isDelete;
     private Date DeleteDate;
     private String DeletedBy;
     public Account() {
 
     }
-    public Account(int accountId, String username, String password, String role, String IMG, Date createdDate, String createBy, Date updatedDate, String updatedBy, boolean idDelete, Date deleteDate, String deletedBy) {
+    public Account(int accountId, String username, String password, String role, String IMG, Date createdDate, String createBy, Date updatedDate, String updatedBy, boolean isDelete, Date deleteDate, String deletedBy) {
         AccountId = accountId;
         Username = username;
         Password = password;
@@ -38,7 +38,7 @@ public class Account {
         CreateBy = createBy;
         UpdatedDate = updatedDate;
         UpdatedBy = updatedBy;
-        this.idDelete = idDelete;
+        this.isDelete = isDelete;
         DeleteDate = deleteDate;
         DeletedBy = deletedBy;
     }
@@ -114,11 +114,11 @@ public class Account {
     }
 
     public boolean isIdDelete() {
-        return idDelete;
+        return isDelete;
     }
 
     public void setIdDelete(boolean idDelete) {
-        this.idDelete = idDelete;
+        this.isDelete = idDelete;
     }
 
     public Date getDeleteDate() {

@@ -44,9 +44,7 @@ public class UpdateProductServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
         Part filePart = request.getPart("image-input");
-
         String productId=request.getParameter("ProductId");
-
         String productName=request.getParameter("ProductName");
         String description=request.getParameter("Description");
         String price=request.getParameter("Price");
@@ -88,9 +86,7 @@ public class UpdateProductServlet extends HttpServlet {
         else if(!isPriceTrue){
             out.print("Wrong input price");
         }
-        else if(checkNameExist(productName)){
-            out.print("Product name is already exist");
-        }
+
         else{
             Product updateProduct= new Product(idConvertProduct,productName,bigDecimalPrice,relativePath,description,product.getCreatedDate(),product.getCreatedBy(),currentDateSql,"admin",false,null,null);
             boolean isUpdateSuccess= productDAO.updateProduct(updateProduct);

@@ -1,6 +1,7 @@
 package controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import model.entity.ProductType;
 import model.entity.Size;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.ConvertIMG;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
+@MultipartConfig
 @WebServlet(name = "AddNewProductServlet", value = "/AddNewProduct")
 public class AddNewProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,10 +103,11 @@ public class AddNewProductServlet extends HttpServlet {
         // Process the uploaded file
         if (filePart != null) {
             // Get the name of the uploaded file
-            filename = filePart.getSubmittedFileName();
-            String savePath="D:\\Java\\ProjectJava\\IdeaProjects\\demo\\src\\main\\webapp\\assets\\images"+File.separator+filename;
-            File file=new File(savePath);
-            filePart.write(file+File.separator);
+            Part filePartLocal = request.getPart("images");
+            if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
+                filename = ConvertIMG.saveImage(filePart, request, "images"); // Nếu có, lưu hình ảnh mới
+            }
+            out.print("Please fill all input");
         }
         if(productName==null || productName.isEmpty() ||description==null|| description.isEmpty() ||price==null|| price.isEmpty() || Objects.equals(filename, "") || optionsSizeJson.isEmpty()||optionsProductTypeJson.isEmpty()){
             out.print("Please fill all input");
