@@ -201,7 +201,7 @@ public class AddNewProductServlet extends HttpServlet {
         java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
         for(String p : optionListColor){
             String[] result = p.split(",");
-            Color newColor=new Color(0,result[0],result[1],id,currentDateSql,"admin",null,null,false,null,null);
+            Color newColor=new Color(0,result[0],"",id,currentDateSql,"admin",null,null,false,null,null);
             boolean isAddColor= colorDAO.addColor(newColor);
             if(!isAddColor){
                 checkSuccess=false;
