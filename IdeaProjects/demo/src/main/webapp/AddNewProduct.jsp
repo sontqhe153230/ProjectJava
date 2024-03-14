@@ -312,8 +312,7 @@
                 type: "POST",
                 url: "AddNewProduct",
                 data: formData,
-                 // Prevent jQuery from processing the data
-                processData: false,
+               processData: false  ,// Prevent jQuery from processing the data
                 contentType: false,  // Prevent jQuery from setting the content type
 
                 success: function(response){
@@ -322,7 +321,7 @@
                         swal("Good job!", "Add New Product Success", "success")
                             .then((value) => {
                                 // Redirect to another page
-                                window.location.href = "/Shop-Clothes/AdminManageProduct";
+                                window.location.href = "/ClothesShop/AdminManageProduct";
                             });
                     } else {
                         let message = response.trim();

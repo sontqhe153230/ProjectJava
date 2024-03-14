@@ -252,7 +252,7 @@
                         swal("Good job!", "Update Success", "success")
                             .then((value) => {
                                 // Redirect to another page
-                                window.location.href = "/Shop-Clothes/AdminManageProduct";
+                                window.location.href = "/ClothesShop/AdminManageProduct";
                             });
                     } else {
                         let message = response.trim();

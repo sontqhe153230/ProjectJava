@@ -92,7 +92,7 @@
                                 <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
                             </ul>
                         </div>
-                        <img src="assets/images/<%= product.getIMG()%>" alt="">
+                        <img src="<%= product.getIMG()%>" alt="">
                     </div>
 
                     <div class="down-content">

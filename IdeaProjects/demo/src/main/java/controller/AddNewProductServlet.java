@@ -27,10 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10,      // 10MB
-        maxRequestSize = 1024 * 1024 * 50)   // 50MB
+@MultipartConfig
 @WebServlet(name = "AddNewProductServlet", value = "/AddNewProduct")
 public class AddNewProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -104,8 +101,13 @@ public class AddNewProductServlet extends HttpServlet {
         Date currentDate = Date.from(CreateDate.atZone(java.time.ZoneId.systemDefault()).toInstant());
         java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
         // Process the uploaded file
-        if(filePart != null && filePart.getSize() > 0){
-            filename = ConvertIMG.saveImage(filePart, request, "img");
+        if (filePart != null) {
+            // Get the name of the uploaded file
+            Part filePartLocal = request.getPart("images");
+            if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
+                filename = ConvertIMG.saveImage(filePart, request, "assets/images"); // Nếu có, lưu hình ảnh mới
+            }
+            out.print("Please fill all input");
         }
         if(productName==null || productName.isEmpty() ||description==null|| description.isEmpty() ||price==null|| price.isEmpty() || Objects.equals(filename, "") || optionsSizeJson.isEmpty()||optionsProductTypeJson.isEmpty()){
             out.print("Please fill all input");
@@ -113,7 +115,9 @@ public class AddNewProductServlet extends HttpServlet {
         else if(!isPriceTrue){
             out.print("Wrong input price");
         }
-
+        else if(checkNameExist(productName)){
+            out.print("Product name is already exist");
+        }
         else if(ListSizeOption.isEmpty() || ListColorOption.isEmpty() || ListProductTypeOption.isEmpty()){
             out.print("Please fill all input");
         }

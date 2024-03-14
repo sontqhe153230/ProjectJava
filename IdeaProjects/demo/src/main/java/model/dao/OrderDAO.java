@@ -79,6 +79,37 @@ public class OrderDAO {
         }
         return false; // Failed to add order
     }
+    public boolean updateOrder(Order order) {
+        boolean success = false;
+        if (connection != null) {
+            String sql = "UPDATE Orders SET ProductID=?, CustomerID=?, Quantity=?, Description=?, IsPayment=?, DeliveryStatus=?, UpdatedDate=?, UpdatedBy=?, IsDelete=?, DeletedDate=?, DeletedBy=?, SizeId=?, ColorId=? WHERE OrderID=?";
+            try {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, order.getProductId());
+                statement.setInt(2, order.getCustomerID());
+                statement.setInt(3, order.getQuantity());
+                statement.setString(4, order.getDescription());
+                statement.setBoolean(5, order.isPayment());
+                statement.setString(6, order.getDeliveryStatus());
+                statement.setDate(7, order.getUpdatedDate());
+                statement.setString(8, order.getUpdatedBy());
+                statement.setBoolean(9, order.isDelete());
+                statement.setDate(10, order.getDeletedDate());
+                statement.setString(11, order.getDeletedBy());
+                statement.setInt(12, order.getSizeId());
+                statement.setInt(13, order.getColorId());
+                statement.setInt(14, order.getOrderId());
+
+                int rowsUpdated = statement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    success = true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return success;
+    }
 
 
 }

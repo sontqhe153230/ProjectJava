@@ -125,7 +125,7 @@
                         swal("Good job!", "Login successful!", "success")
                             .then((value) => {
                                 // Redirect to another page
-                                window.location.href = "/Shop-Clothes";
+                                window.location.href = "/ClothesShop";
                             });
                     }
                     else if(response.trim() === "admin") {

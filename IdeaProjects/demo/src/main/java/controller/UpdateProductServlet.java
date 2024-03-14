@@ -44,9 +44,7 @@ public class UpdateProductServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
         Part filePart = request.getPart("image-input");
-
         String productId=request.getParameter("ProductId");
-
         String productName=request.getParameter("ProductName");
         String description=request.getParameter("Description");
         String price=request.getParameter("Price");
@@ -77,7 +75,7 @@ public class UpdateProductServlet extends HttpServlet {
             // Get the name of the uploaded file
             Part filePartLocal = request.getPart("images");
             if (filePart.getSize() > 0) { // Kiểm tra xem người dùng có tải lên hình ảnh mới không
-                relativePath = ConvertIMG.saveImage(filePart, request, "images"); // Nếu có, lưu hình ảnh mới
+                relativePath = ConvertIMG.saveImage(filePart, request, "assets/images"); // Nếu có, lưu hình ảnh mới
             } else {
                 relativePath = product.getIMG(); // Nếu không, giữ nguyên hình ảnh hiện tại
             }
@@ -88,9 +86,7 @@ public class UpdateProductServlet extends HttpServlet {
         else if(!isPriceTrue){
             out.print("Wrong input price");
         }
-        else if(checkNameExist(productName)){
-            out.print("Product name is already exist");
-        }
+
         else{
             Product updateProduct= new Product(idConvertProduct,productName,bigDecimalPrice,relativePath,description,product.getCreatedDate(),product.getCreatedBy(),currentDateSql,"admin",false,null,null);
             boolean isUpdateSuccess= productDAO.updateProduct(updateProduct);

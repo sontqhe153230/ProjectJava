@@ -15,6 +15,8 @@ import model.entity.Order;
 import model.entity.Product;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "AdminManageOrderServlet", urlPatterns = {"/AdminManageOrder"})
@@ -31,6 +33,42 @@ public class AdminManageOrderServlet extends HttpServlet {
 
         request.setAttribute("orderList", orderList);
         request.getRequestDispatcher("ManageOrder.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        OrderDAO orderDAO = null;
+        try {
+            orderDAO = new OrderDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        String id=request.getParameter("IdUpdate");
+        response.setContentType("text/plain");
+
+        PrintWriter out = response.getWriter();
+        String IsPayment=request.getParameter("isPayment");
+        String DeliveryStatus=request.getParameter("Delivery-Status");
+        int idConvert= Integer.parseInt(id);
+        boolean isPaymentCheck=false;
+        LocalDateTime now = LocalDateTime.now();
+        if(IsPayment.equals("true")){
+            isPaymentCheck=true;
+        }
+        // Convert LocalDateTime to java.sql.Date
+        java.sql.Date sqlDate = java.sql.Date.valueOf(now.toLocalDate());
+        Order orderById=GetOrderByOrderId(idConvert);
+         Order updateOrder= new Order(idConvert,orderById.getProductId(),orderById.getCustomerID(),orderById.getQuantity(),orderById.getDescription(),isPaymentCheck,DeliveryStatus,orderById.getCreatedDate(),orderById.getCreatedBy(),sqlDate,"admin",false,null,null,orderById.getSizeId(),orderById.getColorId());
+        boolean isUpdateComplete= orderDAO.updateOrder(updateOrder);
+        if(isUpdateComplete){
+            out.print("success");
+        }
+        else{
+            out.print("failure");
+        }
+
+        out.flush();
+        out.close();
     }
     public Customer GetCustomerById(int id){
         CustomerDAO customer = null;
@@ -111,5 +149,38 @@ public class AdminManageOrderServlet extends HttpServlet {
             return c.getCustomerName();
         }
         return null;
+    }
+    public Order GetOrderByOrderId(int id){
+        OrderDAO orderDAO = null;
+        try {
+            orderDAO = new OrderDAO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        List<Order> orderList = orderDAO.getAllOrder();
+
+        // Khởi tạo biến để lưu trữ sản phẩm tìm thấy
+        Order foundOrder = null;
+
+        // Lặp qua productList để tìm sản phẩm có ID phù hợp
+        for (Order order : orderList) {
+            if (order.getOrderId() == id) {
+                foundOrder=order;
+                break; // Dừng lặp khi tìm thấy sản phẩm
+            }
+        }
+
+        // Kiểm tra xem sản phẩm có được tìm thấy không
+        if (foundOrder != null) {
+            // Nếu tìm thấy, đặt sản phẩm vào thuộc tính của request
+            return foundOrder;
+        } else {
+            // Nếu không tìm thấy, xử lý trường hợp (ví dụ: hiển thị thông báo lỗi)
+            // Bạn có thể chuyển hướng đến trang lỗi hoặc xử lý nó bằng bất kỳ cách nào phù hợp khác
+            // Ví dụ:
+            return null;
+        }
     }
 }

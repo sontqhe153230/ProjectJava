@@ -138,7 +138,7 @@
                         swal("Good job!", "Change Success", "success")
                             .then((value) => {
                                 // Redirect to another page
-                                window.location.href = "/Shop-Clothes/AdminManageProduct";
+                                window.location.href = "/ClothesShop/AdminManageProduct";
                             });
                     } else {
                         let message = response.trim();
