@@ -3,12 +3,8 @@ package controller;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import model.dao.ColorDAO;
-import model.dao.ProductDAO;
-import model.dao.SizeDAO;
-import model.entity.Color;
-import model.entity.Product;
-import model.entity.Size;
+import model.dao.*;
+import model.entity.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -25,11 +21,15 @@ public class OrderServlet  extends HttpServlet {
         if (session.getAttribute("loggedInUser") == null || session.getAttribute("loggedInUser").equals("")) {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
+        Account account = (Account) session.getAttribute("loggedInUser");
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer customer = customerDAO.get(account.getAccountId());
 
         if (request.getParameter("id") == null || request.getParameter("id").equals("")
                 || request.getParameter("quantity") == null || request.getParameter("quantity").equals("")
                 || request.getParameter("size") == null || request.getParameter("size").equals("")
                 || request.getParameter("color") == null || request.getParameter("color").equals("")) {
+            request.setAttribute("orderList", customerDAO.getOrderByCid(customer.getCustomerID()));
             request.getRequestDispatcher("Cart.jsp").forward(request, response);
         } else {
             // Get product ID, quantity, size, and color from the request
@@ -61,12 +61,21 @@ public class OrderServlet  extends HttpServlet {
             }
 
             // Redirect to the cart page
+            try {
+                OrderDAO orderDAO = new OrderDAO();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            request.setAttribute("orderList", customerDAO.getOrderByCid(customer.getCustomerID()));
             request.getRequestDispatcher("Cart.jsp").forward(request, response);
         }
 
 
 
     }
+
+
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

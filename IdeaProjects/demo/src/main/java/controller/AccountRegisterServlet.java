@@ -1,12 +1,14 @@
 package controller;
 
-import model.dao.*;
+import model.dao.AccountDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import model.dao.CustomerDAO;
 import util.PasswordUtil;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -15,12 +17,14 @@ public class AccountRegisterServlet extends HttpServlet {
 
     AccountDAO accountDAO = new AccountDAO();
 
+    CustomerDAO customerDAO = new CustomerDAO();
+
     public AccountRegisterServlet() throws Exception {
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("view/account-register.jsp").forward(request, response);
+        request.getRequestDispatcher("Register.jsp").forward(request, response);
     }
 
     @Override
@@ -30,10 +34,14 @@ public class AccountRegisterServlet extends HttpServlet {
         String ReEnterPassword = request.getParameter("ReEnterPassword");
         String hassPass = "";
 
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+
         if (password.equals(ReEnterPassword)) {
             if(accountDAO.existsByUsername(username)){
-                request.setAttribute("error", "Username already exists");
-                request.getRequestDispatcher("view/account-register.jsp").forward(request, response);
+                out.print("failure");
+                out.flush();
+                out.close();
                 return;
             }
             try {
@@ -44,12 +52,12 @@ public class AccountRegisterServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
             accountDAO.createAccount(username, hassPass, "user");
-            response.sendRedirect("login");
+            out.print("user");
         } else {
-            request.setAttribute("error", "Password does not match");
-            request.getRequestDispatcher("view/account-register.jsp").forward(request, response);
-
+            out.print("failure");
         }
 
+        out.flush();
+        out.close();
     }
 }

@@ -52,6 +52,7 @@
                             <th>Phone</th>
                             <th>Role</th>
                             <th>Create Date</th>
+                            <th>Is Delete</th>
 
                         </tr>
                         </thead>
@@ -70,6 +71,7 @@
                             <td><%= new AdminManageAccountServlet().GetPhoneById(account.getAccountId()) %></td>
                             <td><%=account.getRole()%></td>
                             <td><%=account.getCreatedDate()%></td>
+                            <td><%= account.isIdDelete()%></td>
                             <td>
                                 <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>

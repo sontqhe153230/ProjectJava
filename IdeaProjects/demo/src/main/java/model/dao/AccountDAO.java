@@ -17,11 +17,11 @@ public class AccountDAO {
     PasswordUtil passwordUtil = new PasswordUtil();
     public AccountDAO() throws Exception {
     }
-    public static boolean createAccount(String username, String password,String role) {
+    public static boolean createAccount(String username, String password, String role) {
         if (connection != null) {
             try {
                 String sql = "INSERT INTO Account (username, password, role, createdDate, createdBy) VALUES (?, ?, ?, ?, ?)";
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, username);
                 preparedStatement.setString(2, password);
                 preparedStatement.setString(3, role);
@@ -29,14 +29,18 @@ public class AccountDAO {
                 preparedStatement.setString(5, username);
 
                 preparedStatement.executeUpdate();
-                return true;
+
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()) {
+                    int accountId = rs.getInt(1);
+                    return CustomerDAO.createCustomer(accountId);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return false;
     }
-
     public boolean existsByUsernameOrEmail(String username, String email) {
         if (connection != null) {
             try {
@@ -139,6 +143,50 @@ public class AccountDAO {
             }
         }
         return AccountList;
+    }
+
+    public Account get(int accountId) {
+        if (connection != null) {
+            try {
+                String sql = "SELECT * FROM Account WHERE AccountID = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setInt(1, accountId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    Account account = new Account();
+                    account.setAccountId(resultSet.getInt("AccountID"));
+                    account.setUsername(resultSet.getString("Username"));
+                    account.setPassword(resultSet.getString("Password"));
+                    account.setRole(resultSet.getString("Role"));
+                    account.setIMG(resultSet.getString("IMG"));
+                    account.setCreatedDate(resultSet.getDate("CreatedDate"));
+                    account.setCreateBy(resultSet.getString("CreatedBy"));
+                    account.setUpdatedDate(resultSet.getDate("UpdatedDate"));
+                    account.setUpdatedBy(resultSet.getString("UpdatedBy"));
+                    account.setIdDelete(resultSet.getBoolean("IsDelete"));
+                    account.setDeleteDate(resultSet.getDate("DeletedDate"));
+                    account.setDeletedBy(resultSet.getString("DeletedBy"));
+                    return account;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public void updateIMG(String id, String relativePath) {
+        if (connection != null) {
+            try {
+                String sql = "UPDATE Account SET IMG = ? WHERE AccountID = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, relativePath);
+                preparedStatement.setInt(2, Integer.parseInt(id));
+                preparedStatement.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

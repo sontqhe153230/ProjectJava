@@ -16,7 +16,7 @@ public class ProductDAO {
     public List<Product> getAllProducts() {
         List<Product> productList = new ArrayList<>();
         if (connection != null) {
-            String sql = "SELECT * FROM Product";
+            String sql = "SELECT * FROM Product where IsDelete = 0";
             try {
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);

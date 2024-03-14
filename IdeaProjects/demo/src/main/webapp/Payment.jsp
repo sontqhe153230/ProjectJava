@@ -191,7 +191,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <img src="110322-qr-code-hmed-425p.webp"  alt="" class="avatar-lg rounded">
+                <img src="assets/images/qr.png"  alt="" class="avatar-lg rounded">
                 <button onclick="GetAlert()"> Complete</i> </button>
             </div>
         </div>
@@ -225,38 +225,30 @@
 <script src="assets/js/custom.js"></script>
 <script>
     function GetAlert() {
-        var status = "success"; // Replace "your_id_here" with the actual ID you want to send
+        var status = "success";
 
-        // Create a new XMLHttpRequest object
-        var xhr = new XMLHttpRequest();
-
-        // Specify the request method and URL
-        xhr.open("POST", "Payment", true);
-
-        // Set the Content-Type header to indicate the data format
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Define a callback function to handle the response
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                // Request finished, do something with the response if needed
-                console.log("Response from servlet:", xhr.responseText);
+        $.ajax({
+            type: "POST",
+            url: "Payment",
+            data: { status: status },
+            success: function(response) {
+                if(response.trim() === "success") {
+                    swal("Complete!", "Order successful!", "success")
+                        .then((value) => {
+                            window.location.href = "/ClothesShop/Cart";
+                        });
+                } else {
+                    swal("Error!", "Order failed. Please enter your information.", "error")
+                        .then((value) => {
+                            window.location.href = "/ClothesShop/profile";
+                        });
+                }
+            },
+            error: function(xhr, status, error){
+                console.error("Error:", error);
+                swal("Error!", "Something went wrong. Please try again later.", "error");
             }
-        };
-
-        // Construct the data to be sent in the request body
-        var data = "status=" + encodeURIComponent(status);
-
-        // Send the request with the data
-        xhr.send(data);
-
-
-        swal("Complete!", "Order successful!", "success")
-            .then((value) => {
-                // Redirect to another page
-                window.location.href = "/Shop-Clothes";
-            });
-
+        });
     }
 
 
@@ -278,7 +270,6 @@
     });
 
 </script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(function () {

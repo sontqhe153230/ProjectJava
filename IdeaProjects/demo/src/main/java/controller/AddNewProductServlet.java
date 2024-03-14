@@ -1,6 +1,7 @@
 package controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import model.entity.ProductType;
 import model.entity.Size;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.ConvertIMG;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxRequestSize = 1024 * 1024 * 50)   // 50MB
 @WebServlet(name = "AddNewProductServlet", value = "/AddNewProduct")
 public class AddNewProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -99,12 +104,8 @@ public class AddNewProductServlet extends HttpServlet {
         Date currentDate = Date.from(CreateDate.atZone(java.time.ZoneId.systemDefault()).toInstant());
         java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
         // Process the uploaded file
-        if (filePart != null) {
-            // Get the name of the uploaded file
-            filename = filePart.getSubmittedFileName();
-            String savePath="D:\\Java\\ProjectJava\\IdeaProjects\\demo\\src\\main\\webapp\\assets\\images"+File.separator+filename;
-            File file=new File(savePath);
-            filePart.write(file+File.separator);
+        if(filePart != null && filePart.getSize() > 0){
+            filename = ConvertIMG.saveImage(filePart, request, "img");
         }
         if(productName==null || productName.isEmpty() ||description==null|| description.isEmpty() ||price==null|| price.isEmpty() || Objects.equals(filename, "") || optionsSizeJson.isEmpty()||optionsProductTypeJson.isEmpty()){
             out.print("Please fill all input");
@@ -112,9 +113,7 @@ public class AddNewProductServlet extends HttpServlet {
         else if(!isPriceTrue){
             out.print("Wrong input price");
         }
-        else if(checkNameExist(productName)){
-            out.print("Product name is already exist");
-        }
+
         else if(ListSizeOption.isEmpty() || ListColorOption.isEmpty() || ListProductTypeOption.isEmpty()){
             out.print("Please fill all input");
         }
@@ -198,7 +197,7 @@ public class AddNewProductServlet extends HttpServlet {
         java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
         for(String p : optionListColor){
             String[] result = p.split(",");
-            Color newColor=new Color(0,result[0],result[1],id,currentDateSql,"admin",null,null,false,null,null);
+            Color newColor=new Color(0,result[0],"",id,currentDateSql,"admin",null,null,false,null,null);
             boolean isAddColor= colorDAO.addColor(newColor);
             if(!isAddColor){
                 checkSuccess=false;

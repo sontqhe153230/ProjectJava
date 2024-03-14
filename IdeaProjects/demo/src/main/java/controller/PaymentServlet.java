@@ -7,9 +7,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.dao.CustomerDAO;
 import model.dao.OrderDAO;
 import model.dao.ProductDAO;
 import model.entity.Account;
+import model.entity.Customer;
 import model.entity.Order;
 import model.entity.Product;
 import util.QRGenerate;
@@ -21,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static java.lang.System.out;
 
 @WebServlet(name ="PaymentServlet", value = "/Payment")
 public class PaymentServlet extends HttpServlet {
@@ -57,16 +61,22 @@ public class PaymentServlet extends HttpServlet {
                         OrderId=RandomNumber();
                     }
                     Account account=(Account) session.getAttribute("loggedInUser");
-                    int CustomerId=account.getAccountId();
+                    CustomerDAO customerDAO = new CustomerDAO();
+                    Customer customer = customerDAO.get(account.getAccountId());
+                    if(customer.getPhone() == null || customer.getAddress() == null || customer.getEmail() == null){
+                        response.sendRedirect("profile");
+                        return;
+                    }
                     String description="Order to Product"+productId;
                     LocalDateTime CreateDate = LocalDateTime.now();
                     Date currentDate = Date.from(CreateDate.atZone(java.time.ZoneId.systemDefault()).toInstant());
                     java.sql.Date currentDateSql = new java.sql.Date(currentDate.getTime());
                     String CreateBy="user";
 
-                    Order newOrder=new Order(OrderId,productId,CustomerId,quantity,description,false,"Pending",currentDateSql,CreateBy,null,null,false,null,null,size,color);
+                    Order newOrder=new Order(OrderId,productId,customer.getCustomerID(),quantity,description,false,"Pending",currentDateSql,CreateBy,null,null,false,null,null,size,color);
 
                     boolean idAddSuccess=orderDAO.addOrder(newOrder);
+                    session.removeAttribute("cart");
                     response.setContentType("text/plain");
                     PrintWriter out = response.getWriter();
                     if(idAddSuccess){

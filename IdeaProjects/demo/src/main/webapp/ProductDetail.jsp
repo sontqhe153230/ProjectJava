@@ -129,7 +129,6 @@
                         </div>
                     </div>
                     <div class="total">
-                        <h4>Total: $210.00</h4>
                         <div class="main-border-button"><a href="javascript:void(0);"onchange="addToCart(<%= product.getProductID()%>,<%= sizes.size()%>,<%= colors.size()%>)" onclick="addToCart(<%= product.getProductID()%>,<%= sizes.size()%>,<%= colors.size()%>)">Add To Cart</a></div>
                     </div>
                 </div>

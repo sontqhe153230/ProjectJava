@@ -18,7 +18,7 @@ public class LogoutServlet extends HttpServlet {
         }
 
         // Redirect the user to the login page
-        response.sendRedirect("/Shop-Clothes");
+        response.sendRedirect("/ClothesShop");
     }
     }
 

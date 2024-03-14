@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="controller.OrderServlet" %>
+<%@ page import="model.entity.Order" %>
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +15,7 @@
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
-    <title>Hexashop Ecommerce HTML CSS Template</title>
+    <title>Hexashop</title>
 
 
     <!-- Additional CSS Files -->
@@ -124,7 +125,7 @@
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">Quantity</p>
                                         <div class="d-inline-flex">
-                                            <h5 class="mb-0 mt-2">$<%= quantity %></h5>
+                                            <h5 class="mb-0 mt-2"><%= quantity %></h5>
                                         </div>
                                     </div>
                                 </div>
@@ -152,7 +153,7 @@
 
                 <div class="row my-4">
                     <div class="col-sm-6">
-                        <a href="/Shop-Clothes" class="btn btn-link text-muted">
+                        <a href="/ClothesShop" class="btn btn-link text-muted">
                             <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
                     </div> <!-- end col -->
                     <div class="col-sm-6">
@@ -204,6 +205,53 @@
 
     </div>
 </section>
+<div id="content" class="p-4 p-md-5">
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-8"><h2>Manage <b>Order</b></h2></div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+
+                    <tr>
+                        <th>OrderId</th>
+                        <th>Product name<i class="fa fa-sort"></i></th>
+                        <th>Description <i class="fa fa-sort"></i></th>
+                        <th>Is Payment</th>
+                        <th>Delivery <i class="fa fa-sort"></i></th>
+                        <th>Create Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<Order> orders = (List<Order>) request.getAttribute("orderList");
+                        for (Order order : orders) {
+                            if(!order.isDelete()){
+                    %>
+                    <tr>
+
+                        <td><%= order.getOrderId()%></td>
+                        <td><%= new OrderServlet().GetNameById(order.getProductId())%></td>
+                        <td><%= order.getDescription()%></td>
+                        <td><%= order.isPayment()==true?"Done":"Not yet" %></td>
+                        <td><%= order.getDeliveryStatus()%></td>
+                        <td><%= order.getCreatedDate()%></td>
+
+                    </tr>
+                    <%}%>
+                    <%}%>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 
 <!-- ***** Products Area Ends ***** -->
 

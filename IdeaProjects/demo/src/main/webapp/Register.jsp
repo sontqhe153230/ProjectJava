@@ -32,43 +32,51 @@
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
-            <form class="login100-form validate-form">
-					<span class="login100-form-title p-b-26">
-						Sign In
-					</span>
+            <form id="loginForm" class="login100-form validate-form">
+     <span class="login100-form-title p-b-26">
+      Welcome To Shop
+     </span>
                 <span class="login100-form-title p-b-48">
 
-					</span>
+     </span>
 
                 <div class="wrap-input100 validate-input" >
-                    <input class="input100" type="text" name="Username">
+                    <input class="input100" type="text" name="username">
                     <span class="focus-input100" data-placeholder="username"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter password">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
-						</span>
-                    <input class="input100" type="password" name="pass">
+      <span class="btn-show-pass">
+       <i class="zmdi zmdi-eye"></i>
+      </span>
+                    <input class="input100" type="password" name="password">
                     <span class="focus-input100" data-placeholder="Password"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Re-enter password">
+      <span class="btn-show-pass">
+       <i class="zmdi zmdi-eye"></i>
+      </span>
+                    <input class="input100" type="password" name="ReEnterPassword">
+                    <span class="focus-input100" data-placeholder="Re-enter Password"></span>
                 </div>
 
                 <div class="container-login100-form-btn">
                     <div class="wrap-login100-form-btn">
                         <div class="login100-form-bgbtn"></div>
                         <button class="login100-form-btn">
-                            Login
+                            Register
                         </button>
                     </div>
                 </div>
 
                 <div class="text-center p-t-115">
-						<span class="txt1">
-							Don’t have an account?
-						</span>
+      <span class="txt1">
+       Already have an account?
+      </span>
 
-                    <a class="txt2" href="#">
-                        Sign Up
+                    <a class="txt2" href="Login">
+                        Sign In
                     </a>
                 </div>
             </form>
@@ -78,7 +86,7 @@
 
 
 <div id="dropDownSelect1"></div>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!--===============================================================================================-->
 <script src="assets/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
@@ -95,6 +103,41 @@
 <script src="assets/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="assets/js/main.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#loginForm").submit(function(event){
+            // Prevent default form submission
+            event.preventDefault();
 
+            // Get form data
+            var formData = $(this).serialize();
+
+            // Submit form data using AJAX
+            $.ajax({
+                type: "POST",
+                url: "register",
+                data: formData,
+                success: function(response){
+                    if(response.trim() === "user") {
+                        // Show success message
+                        swal("Good job!", "Registration successful!", "success")
+                            .then((value) => {
+                                // Redirect to another page
+                                window.location.href = "/ClothesShop/Login";
+                            });
+                    }
+                    else {
+                        swal("Registration failed!", "Please try again.", "error");
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.error("Error:", error);
+                    swal("Error!", "Something went wrong. Please try again later.", "error");
+                }
+            });
+        });
+    });
+
+</script>
 </body>
 </html>

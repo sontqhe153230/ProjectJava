@@ -67,7 +67,7 @@
 							Don’t have an account?
 						</span>
 
-                    <a class="txt2" href="#">
+                    <a class="txt2" href="register">
                         Sign Up
                     </a>
                 </div>
@@ -115,7 +115,7 @@
                         swal("Good job!", "Login successful!", "success")
                             .then((value) => {
                                 // Redirect to another page
-                                window.location.href = "/Shop-Clothes";
+                                window.location.href = "/ClothesShop";
                             });
                     }
                    else if(response.trim() === "admin") {

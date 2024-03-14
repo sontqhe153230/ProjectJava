@@ -313,6 +313,7 @@
                 url: "AddNewProduct",
                 data: formData,
                  // Prevent jQuery from processing the data
+                processData: false,
                 contentType: false,  // Prevent jQuery from setting the content type
 
                 success: function(response){
